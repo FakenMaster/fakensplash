@@ -7,12 +7,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
-import 'package:fakensplash/ui/main_page.dart';
+import 'package:fakensplash/ui/page/main_page.dart';
+import 'package:fakensplash/ui/page/collection_detail.dart';
 
 abstract class Routes {
   static const mainPage = '/';
+  static const collectionDetailPage = '/collection-detail-page';
   static const all = {
     mainPage,
+    collectionDetailPage,
   };
 }
 
@@ -30,6 +33,11 @@ class SplashRouter extends RouterBase {
       case Routes.mainPage:
         return MaterialPageRoute<dynamic>(
           builder: (context) => MainPage(),
+          settings: settings,
+        );
+      case Routes.collectionDetailPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => CollectionDetailPage(),
           settings: settings,
         );
       default:

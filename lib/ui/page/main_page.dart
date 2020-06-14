@@ -1,10 +1,15 @@
-import 'package:fakensplash/ui/collection_page.dart';
-import 'package:fakensplash/ui/home_page.dart';
+import 'package:fakensplash/bloc/collection/bloc/collection_bloc.dart';
+import 'package:fakensplash/bloc/photo/photo_bloc.dart';
+import 'package:fakensplash/ui/page/collection_page.dart';
+import 'package:fakensplash/ui/page/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:time/time.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../repository/repository.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -17,6 +22,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    GetIt.I.registerLazySingleton<Repository>(() => Repository());
     rotateSubject = BehaviorSubject.seeded(true);
   }
 
@@ -28,20 +34,43 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: DefaultTabController(
-          length: 2,
-          child: CustomScrollView(
-            slivers: [
-              appBar(),
-              tabTitle(),
-              tabBarContent(),
-            ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => PhotoBloc(),
+        ),
+        BlocProvider(
+          create: (_) => CollectionBloc(),
+        )
+      ],
+      child: Scaffold(
+        body: SafeArea(
+          child: DefaultTabController(
+            length: 2,
+            child: NestedScrollView(
+              headerSliverBuilder:
+                  (BuildContext context, bool innerBoxIsScrolled) {
+                return <Widget>[
+                  appBar(),
+                  tabTitle(),
+                ];
+              },
+              body: tabBarContent(),
+            ),
           ),
         ),
+        drawer: drawer(),
       ),
-      drawer: drawer(),
+    );
+  }
+
+  Widget customScroll() {
+    return CustomScrollView(
+      slivers: [
+        appBar(),
+        tabTitle(),
+        tabBarContent(),
+      ],
     );
   }
 
@@ -73,13 +102,19 @@ class _MainPageState extends State<MainPage> {
           labelStyle: TextStyle(
             fontFamily: 'Raleway',
             fontSize: 17,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+          unselectedLabelStyle: TextStyle(
+            fontFamily: 'Raleway',
+            fontSize: 17,
             fontWeight: FontWeight.w400,
             color: Colors.black,
           ),
           indicatorColor: Colors.black,
           tabs: [
             Tab(text: 'Home'),
-            Tab(text: 'Collection'),
+            Tab(text: 'Collections'),
           ],
         ),
       ),
@@ -87,12 +122,14 @@ class _MainPageState extends State<MainPage> {
   }
 
   Widget tabBarContent() {
-    return SliverFillRemaining(
-      child: TabBarView(children: [
-        HomePage(),
-        CollectionPage(),
-      ]),
-    );
+    return TabBarView(children: [
+      HomePage(
+        key: PageStorageKey('home'),
+      ),
+      CollectionPage(
+        key: PageStorageKey('collections'),
+      ),
+    ]);
   }
 
   Widget drawer() {

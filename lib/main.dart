@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: Colors.white,
+        accentColor: Colors.black,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       builder: (context, child) => ExtendedNavigator(
