@@ -34,7 +34,7 @@ class CollectionListWidget extends StatelessWidget {
               ExtendedNavigator.of(context)
                   .pushNamed(Routes.collectionDetailPage);
             },
-            child: itemWidget(index,context),
+            child: itemWidget(index, context),
           );
         },
         itemCount: collections.length + 1,
@@ -42,7 +42,7 @@ class CollectionListWidget extends StatelessWidget {
     );
   }
 
-  Widget itemWidget(int index,BuildContext context) {
+  Widget itemWidget(int index, BuildContext context) {
     if (index == collections.length) {
       if (hasLoadMore) {
         return Center(
@@ -60,7 +60,9 @@ class CollectionListWidget extends StatelessWidget {
     var coverPhoto = collection.coverPhoto;
 
     double width = MediaQuery.of(context).size.width;
-          double dpr = MediaQuery.of(context).devicePixelRatio;
+    double dpr = MediaQuery.of(context).devicePixelRatio;
+    print('图片:' + coverPhoto.urls.raw + "?w=$width&dpr=$dpr");
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,13 +71,13 @@ class CollectionListWidget extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
             child: Image.network(
-              coverPhoto.urls.raw+"?width=$width&dpr=$dpr",
+              coverPhoto.urls.raw + "?width=$width&dpr=$dpr",
               fit: BoxFit.cover,
             ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal:20.0,vertical: 15.0),
+          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
