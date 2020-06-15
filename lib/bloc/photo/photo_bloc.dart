@@ -25,7 +25,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   Stream<Transition<PhotoEvent, PhotoState>> transformEvents(
       Stream<PhotoEvent> events, transitionFn) {
     return events.distinct((previous, current) {
-      var isEqual = previous != null && previous == current;
+      var isEqual = current != null && current is! PhotoRefreshEvent && previous == current;
       print('请求相同吗:$isEqual');
       var currentStateIsError = state is PhotoError;
       print('上次的结果是error吗:$currentStateIsError');

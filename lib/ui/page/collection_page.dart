@@ -8,7 +8,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/collection/bloc/collection_bloc.dart';
-import '../../bloc/collection/bloc/collection_bloc.dart';
 import '../widget/loading_widget.dart';
 
 class CollectionPage extends StatefulWidget {
@@ -29,27 +28,22 @@ class _CollectionPageState extends State<CollectionPage>
   Widget build(BuildContext context) {
     var bloc = context.bloc<CollectionBloc>();
 
-    return RefreshIndicator(
-      onRefresh: () async {
-        bloc.add(CollectionEvent.refresh());
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => Container(),
+          loading: () => LoadingWidget(),
+          loadMore: () {
+            return CollectionListWidget(
+              collections: bloc.collectionSuccess.collections,
+              hasLoadMore: true,
+            );
+          },
+          error: (error) => LoadErrorWidget(error:error,clickCallback: ()=>bloc.add(CollectionRefreshEvent()),),
+          success: (int pageNo, List<Collection> collections) =>
+              CollectionListWidget(collections: collections),
+        );
       },
-      child: BlocBuilder<CollectionBloc, CollectionState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => Container(),
-            loading: () => LoadingWidget(),
-            loadMore: () {
-              return CollectionListWidget(
-                collections: bloc.collectionSuccess.collections,
-                hasLoadMore: true,
-              );
-            },
-            error: (error) => LoadErrorWidget(error:error,clickCallback: ()=>bloc.add(CollectionRefreshEvent()),),
-            success: (int pageNo, List<Collection> collections) =>
-                CollectionListWidget(collections: collections),
-          );
-        },
-      ),
     );
   }
 

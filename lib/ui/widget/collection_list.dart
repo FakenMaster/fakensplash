@@ -61,7 +61,7 @@ class CollectionListWidget extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     double dpr = MediaQuery.of(context).devicePixelRatio;
-    print('图片:' + coverPhoto.urls.raw + "?w=$width&dpr=$dpr");
+    // print('图片:' + coverPhoto.urls.raw + "&w=$width&dpr=$dpr");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,7 +71,7 @@ class CollectionListWidget extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
             child: Image.network(
-              coverPhoto.urls.raw + "?width=$width&dpr=$dpr",
+              coverPhoto.urls.small,
               fit: BoxFit.cover,
             ),
           ),

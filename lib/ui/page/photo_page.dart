@@ -27,27 +27,26 @@ class _PhotoPageState extends State<PhotoPage>
   @override
   Widget build(BuildContext context) {
     var bloc = context.bloc<PhotoBloc>();
-    return RefreshIndicator(
-      onRefresh: () async {
-        bloc.add(PhotoEvent.refresh());
+    return BlocBuilder<PhotoBloc, PhotoState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => Container(),
+          loading: () => LoadingWidget(),
+          loadMore: () {
+            return PhotoListWidget(
+              photos: bloc.photoSuccess.photos,
+              hasLoadMore: true,
+            );
+          },
+          error: (error) => LoadErrorWidget(
+              error: error,
+              clickCallback: () => bloc.add(
+                    PhotoRefreshEvent(),
+                  )),
+          success: (int page, List<Photo> photos) =>
+              PhotoListWidget(photos: photos),
+        );
       },
-      child: BlocBuilder<PhotoBloc, PhotoState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => Container(),
-            loading: () => LoadingWidget(),
-            loadMore: () {
-              return PhotoListWidget(
-                photos: bloc.photoSuccess.photos,
-                hasLoadMore: true,
-              );
-            },
-            error: (error) => LoadErrorWidget(error:error,clickCallback: ()=>bloc.add(PhotoRefreshEvent(),)),
-            success: (int page, List<Photo> photos) =>
-                PhotoListWidget(photos: photos),
-          );
-        },
-      ),
     );
   }
 

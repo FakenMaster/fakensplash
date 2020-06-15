@@ -8,6 +8,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 
 import '../../repository/repository.dart';
 
@@ -16,19 +18,26 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   BehaviorSubject<bool> rotateSubject;
 
+  TabController tabController;
+  ScrollController scrollController;
+  var _tabs = ['Home', 'Collections'];
   @override
   void initState() {
     super.initState();
     GetIt.I.registerLazySingleton<Repository>(() => Repository());
+    tabController = TabController(length: 2, vsync: this);
+    scrollController = ScrollController();
     rotateSubject = BehaviorSubject.seeded(true);
   }
 
   @override
   void dispose() {
     rotateSubject.close();
+    tabController.dispose();
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -47,7 +56,11 @@ class _MainPageState extends State<MainPage> {
         body: SafeArea(
           child: DefaultTabController(
             length: 2,
-            child: NestedScrollView(
+            child: extended.NestedScrollView(
+              pinnedHeaderSliverHeightBuilder: () => kTextTabBarHeight,
+              innerScrollPositionKeyBuilder: () {
+                return Key(_tabs[tabController.index]);
+              },
               headerSliverBuilder:
                   (BuildContext context, bool innerBoxIsScrolled) {
                 return <Widget>[
@@ -55,7 +68,7 @@ class _MainPageState extends State<MainPage> {
                   tabTitle(),
                 ];
               },
-              body: tabBarContent(),
+              body: Builder(builder: (context)=>tabBarContent(context)),
             ),
           ),
         ),
@@ -69,7 +82,7 @@ class _MainPageState extends State<MainPage> {
       slivers: [
         appBar(),
         tabTitle(),
-        tabBarContent(),
+        tabBarContent(context),
       ],
     );
   }
@@ -99,6 +112,7 @@ class _MainPageState extends State<MainPage> {
       pinned: true,
       delegate: HomeTitleTabHeader(
         TabBar(
+          controller: tabController,
           labelStyle: TextStyle(
             fontFamily: 'Raleway',
             fontSize: 17,
@@ -121,15 +135,34 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget tabBarContent() {
-    return TabBarView(children: [
-      PhotoPage(
-        key: PageStorageKey('home'),
-      ),
-      CollectionPage(
-        key: PageStorageKey('collections'),
-      ),
-    ]);
+  Widget tabBarContent(BuildContext context) {
+    return TabBarView(
+      controller: tabController,
+      children: [
+        extended.NestedScrollViewInnerScrollPositionKeyWidget(
+          Key(_tabs[0]),
+          extended.NestedScrollViewRefreshIndicator(
+            onRefresh: () async {
+              context.bloc<PhotoBloc>().add(PhotoRefreshEvent());
+            },
+            child: PhotoPage(
+              key: PageStorageKey('home'),
+            ),
+          ),
+        ),
+        extended.NestedScrollViewInnerScrollPositionKeyWidget(
+          Key(_tabs[1]),
+          extended.NestedScrollViewRefreshIndicator(
+            onRefresh: () async {
+              context.bloc<CollectionBloc>().add(CollectionRefreshEvent());
+            },
+            child: CollectionPage(
+              key: PageStorageKey('collections'),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   Widget drawer() {

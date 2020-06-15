@@ -38,15 +38,16 @@ class PhotoListWidget extends StatelessWidget {
             return SizedBox();
           }
           var photo = photos[index];
-          double width = MediaQuery.of(context).size.width;
-          double dpr = MediaQuery.of(context).devicePixelRatio;
-          print('图片:' + photos[index].urls.raw + "?w=$width&dpr=$dpr");
+          var width = MediaQuery.of(context).size.width.toInt();
+          var dpr = MediaQuery.of(context).devicePixelRatio.toInt();
+          // print('图片:' + photos[index].urls.raw + "&w=$width&dpr=$dpr");
+          // print('smal:${photo.urls.toJson()}');
           return Container(
             color: HexColor.fromHex(photo.color),
             child: AspectRatio(
               aspectRatio: photo.width / photo.height,
               child: Image.network(
-                photos[index].urls.raw + "?w=$width&dpr=$dpr",
+                photo.urls.small,
                 fit: BoxFit.cover,
               ),
             ),
