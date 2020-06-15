@@ -5,6 +5,7 @@ import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../model/collection.dart';
 import '../../../repository/repository.dart';
@@ -18,9 +19,20 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   CollectionSuccess get collectionSuccess => _collectionSuccess;
 
-  bool _isLoadingMore = false;
   @override
   CollectionState get initialState => CollectionInitial();
+
+  @override
+  Stream<Transition<CollectionEvent, CollectionState>> transformEvents(
+      Stream<CollectionEvent> events, transitionFn) {
+    return events.distinct((previous, current) {
+      var isEqual = previous != null && previous == current;
+      print('请求相同吗:$isEqual');
+      var currentStateIsError = state is CollectionError;
+      print('上次的结果是error吗:$currentStateIsError');
+      return isEqual && !currentStateIsError;
+    }).switchMap(transitionFn);
+  }
 
   @override
   Stream<CollectionState> mapEventToState(
@@ -35,7 +47,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       yield await _loadData();
     } else if (event is CollectionLoadMoreEvent) {
       var data = await _loadData(page: event.page);
-      _isLoadingMore = false;
       yield data;
     }
   }
@@ -43,13 +54,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   loadMore() async {
     //_loadData(page: _photoSuccess.page + 1);
     // should use rxdart to detect repeat same request.
-    if (!_isLoadingMore) {
-      _isLoadingMore = true;
-      print('加载更多：${_collectionSuccess.page + 1}');
-      add(CollectionLoadMoreEvent(_collectionSuccess.page + 1));
-    } else {
-      print('正在加载中，不要重复加载：${_collectionSuccess.page + 1}');
-    }
+    print('加载更多：${_collectionSuccess.page + 1}');
+    add(CollectionLoadMoreEvent(_collectionSuccess.page + 1));
   }
 
   Future<CollectionState> _loadData({int page = 1}) async {
@@ -67,6 +73,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
           CollectionState.success(page, collctions..addAll(data));
       return _collectionSuccess;
     } catch (e) {
+      print('异常:$e');
       return CollectionState.error(e);
     }
   }

@@ -3,29 +3,42 @@ import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/util/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../bloc/collection/bloc/collection_bloc.dart';
 import '../../route/splash_router.gr.dart';
 
 class CollectionListWidget extends StatelessWidget {
   final List<Collection> collections;
   final bool hasLoadMore;
-  CollectionListWidget({Key key, @required this.collections, this.hasLoadMore})
+  CollectionListWidget(
+      {Key key, @required this.collections, this.hasLoadMore = false})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      key: PageStorageKey(10),
-      itemBuilder: (context, index) {
-        return GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: () {
-            ExtendedNavigator.of(context)
-                .pushNamed(Routes.collectionDetailPage);
-          },
-          child: itemWidget(index),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification notification) {
+        if (notification.metrics.pixels ==
+            notification.metrics.maxScrollExtent) {
+          context.bloc<CollectionBloc>().loadMore();
+          return true;
+        }
+        return false;
       },
-      itemCount: collections.length + 1,
+      child: ListView.builder(
+        key: PageStorageKey(10),
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            behavior: HitTestBehavior.translucent,
+            onTap: () {
+              ExtendedNavigator.of(context)
+                  .pushNamed(Routes.collectionDetailPage);
+            },
+            child: itemWidget(index),
+          );
+        },
+        itemCount: collections.length + 1,
+      ),
     );
   }
 

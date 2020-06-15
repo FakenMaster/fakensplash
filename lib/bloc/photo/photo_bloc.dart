@@ -18,14 +18,21 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   PhotoSuccess _photoSuccess;
   PhotoSuccess get photoSuccess => _photoSuccess;
 
-  bool _isLoadingMore = false;
   @override
   PhotoState get initialState => PhotoInitial();
 
   @override
-  Stream<Transition<PhotoEvent, PhotoState>> transformEvents(Stream<PhotoEvent> events, transitionFn) {
-    return super.transformEvents(events, transitionFn);
+  Stream<Transition<PhotoEvent, PhotoState>> transformEvents(
+      Stream<PhotoEvent> events, transitionFn) {
+    return events.distinct((previous, current) {
+      var isEqual = previous != null && previous == current;
+      print('请求相同吗:$isEqual');
+      var currentStateIsError = state is PhotoError;
+      print('上次的结果是error吗:$currentStateIsError');
+      return isEqual && !currentStateIsError;
+    }).switchMap(transitionFn);
   }
+
   @override
   Stream<PhotoState> mapEventToState(
     PhotoEvent event,
@@ -38,27 +45,20 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
     if (event is PhotoRefreshEvent) {
       yield await _loadData();
     } else if (event is PhotoLoadMoreEvent) {
-      var data = await _loadData(page: event.page);
-      _isLoadingMore = false;
-      yield data;
+      yield await _loadData(page: event.page);
     }
   }
 
   loadMore() async {
-    //_loadData(page: _photoSuccess.page + 1);
-    // should use rxdart to detect repeat same request.
-    if (!_isLoadingMore) {
-      _isLoadingMore = true;
-      print('加载更多：${_photoSuccess.page + 1}');
-      add(PhotoLoadMoreEvent(_photoSuccess.page + 1));
-    } else {
-      print('正在加载中，不要重复加载：${_photoSuccess.page + 1}');
-    }
+    print('加载更多：${_photoSuccess.page + 1}');
+    add(PhotoLoadMoreEvent(_photoSuccess.page + 1));
   }
 
   Future<PhotoState> _loadData({int page = 1}) async {
+    page ??= 1;
     try {
       var data = await GetIt.I<Repository>().photos(page: page);
+      print('data数据类型:$data');
       if (data == null) {
         return PhotoState.error('数据为空');
       }
@@ -70,6 +70,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
       _photoSuccess = PhotoState.success(page, photos..addAll(data));
       return _photoSuccess;
     } catch (e) {
+      print('捕获到了异常:$e');
       return PhotoState.error(e);
     }
   }
