@@ -5,6 +5,7 @@ import 'package:fakensplash/model/photo.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../repository/repository.dart';
 
@@ -21,6 +22,10 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   @override
   PhotoState get initialState => PhotoInitial();
 
+  @override
+  Stream<Transition<PhotoEvent, PhotoState>> transformEvents(Stream<PhotoEvent> events, transitionFn) {
+    return super.transformEvents(events, transitionFn);
+  }
   @override
   Stream<PhotoState> mapEventToState(
     PhotoEvent event,
