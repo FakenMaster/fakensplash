@@ -31,6 +31,12 @@ class _CollectionPageState extends State<CollectionPage>
           return state.when(
             initial: () => Container(),
             loading: () => LoadingWidget(),
+            loadMore: () {
+              return CollectionListWidget(
+                collections: context.bloc<CollectionBloc>().photoSuccess.photos,
+                hasLoadMore: true,
+              );
+            },
             error: (error) => ErrorWidget(error),
             success: (int pageNo, List<Collection> collections) =>
                 CollectionListWidget(collections: collections),

@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
-  HomePage({Key key}):super(key:key);
+class PhotoPage extends StatefulWidget {
+  PhotoPage({Key key}) : super(key: key);
   @override
-  _HomePageState createState() => _HomePageState();
+  _PhotoPageState createState() => _PhotoPageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
+class _PhotoPageState extends State<PhotoPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   void initState() {
     super.initState();
@@ -30,8 +31,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin{
           return state.when(
             initial: () => Container(),
             loading: () => LoadingWidget(),
+            loadMore: () {
+              return PhotoListWidget(
+                photos: context.bloc<PhotoBloc>().photoSuccess.photos,
+                hasLoadMore: true,
+              );
+            },
             error: (error) => ErrorWidget(error),
-            success: (int pageNo, List<Photo> photos) =>
+            success: (int page, List<Photo> photos) =>
                 PhotoListWidget(photos: photos),
           );
         },

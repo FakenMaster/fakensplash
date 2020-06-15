@@ -1,7 +1,7 @@
 import 'package:fakensplash/bloc/collection/bloc/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/ui/page/collection_page.dart';
-import 'package:fakensplash/ui/page/home_page.dart';
+import 'package:fakensplash/ui/page/photo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -123,7 +123,7 @@ class _MainPageState extends State<MainPage> {
 
   Widget tabBarContent() {
     return TabBarView(children: [
-      HomePage(
+      PhotoPage(
         key: PageStorageKey('home'),
       ),
       CollectionPage(

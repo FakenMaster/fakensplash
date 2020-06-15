@@ -1,28 +1,56 @@
+import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/util/colors.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PhotoListWidget extends StatelessWidget {
   final List<Photo> photos;
-  PhotoListWidget({Key key, @required this.photos}) : super(key: key);
+  final bool hasLoadMore;
+  PhotoListWidget({Key key, @required this.photos, this.hasLoadMore = false})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      key: PageStorageKey(10),
-      // physics: NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        var photo = photos[index];
-        return Container(
-          color: AMERICAN_COLORS[index.remainder(AMERICAN_COLORS.length)],
-          child: AspectRatio(
-            aspectRatio: photo.width / photo.height,
-            child: Image.network(
-              photos[index].urls.small,
-            ),
-          ),
-        );
+    return NotificationListener<ScrollNotification>(
+      onNotification: (ScrollNotification notification) {
+        if (notification.metrics.pixels ==
+            notification.metrics.maxScrollExtent) {
+          context.bloc<PhotoBloc>().loadMore();
+          return true;
+        }
+        return false;
       },
-      itemCount: photos.length,
+      child: ListView.builder(
+        key: PageStorageKey(10),
+        itemBuilder: (context, index) {
+          if (index == photos.length) {
+            if (hasLoadMore) {
+              return Center(
+                child: Container(
+                  width: 50,
+                  height: 50,
+                  padding: EdgeInsets.all(10),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+            return SizedBox();
+          }
+          var photo = photos[index];
+          return Container(
+            color: BACKGROUND_COLORS[index.remainder(BACKGROUND_COLORS.length)],
+            child: AspectRatio(
+              aspectRatio: photo.width / photo.height,
+              child: Image.network(
+                photos[index].urls.small,
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        },
+        itemCount: photos.length + 1,
+      ),
     );
   }
 }
