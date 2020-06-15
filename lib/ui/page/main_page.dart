@@ -22,14 +22,12 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   BehaviorSubject<bool> rotateSubject;
 
   TabController tabController;
-  ScrollController scrollController;
   var _tabs = ['Home', 'Collections'];
   @override
   void initState() {
     super.initState();
     GetIt.I.registerLazySingleton<Repository>(() => Repository());
     tabController = TabController(length: 2, vsync: this);
-    scrollController = ScrollController();
     rotateSubject = BehaviorSubject.seeded(true);
   }
 
@@ -37,7 +35,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   void dispose() {
     rotateSubject.close();
     tabController.dispose();
-    scrollController.dispose();
     super.dispose();
   }
 
@@ -145,9 +142,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             onRefresh: () async {
               context.bloc<PhotoBloc>().add(PhotoRefreshEvent());
             },
-            child: PhotoPage(
-              key: PageStorageKey('home'),
-            ),
+            child: PhotoPage(),
           ),
         ),
         extended.NestedScrollViewInnerScrollPositionKeyWidget(
@@ -156,9 +151,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             onRefresh: () async {
               context.bloc<CollectionBloc>().add(CollectionRefreshEvent());
             },
-            child: CollectionPage(
-              key: PageStorageKey('collections'),
-            ),
+            child: CollectionPage(),
           ),
         ),
       ],

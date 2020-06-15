@@ -22,7 +22,7 @@ class PhotoListWidget extends StatelessWidget {
         return false;
       },
       child: ListView.builder(
-        key: PageStorageKey(10),
+        key: PageStorageKey('Photo'),
         itemBuilder: (context, index) {
           if (index == photos.length) {
             if (hasLoadMore) {

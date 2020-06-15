@@ -11,26 +11,28 @@ import '../../bloc/photo/photo_bloc.dart';
 import '../../bloc/photo/photo_bloc.dart';
 
 class PhotoPage extends StatefulWidget {
-  PhotoPage({Key key}) : super(key: key);
   @override
   _PhotoPageState createState() => _PhotoPageState();
 }
 
 class _PhotoPageState extends State<PhotoPage>
     with AutomaticKeepAliveClientMixin {
+  PhotoBloc bloc;
   @override
   void initState() {
     super.initState();
-    context.bloc<PhotoBloc>().add(PhotoEvent.refresh());
+    bloc = context.bloc<PhotoBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    var bloc = context.bloc<PhotoBloc>();
     return BlocBuilder<PhotoBloc, PhotoState>(
       builder: (context, state) {
         return state.when(
-          initial: () => Container(),
+          initial: () {
+            bloc.add(PhotoEvent.refresh());
+            return Container();
+          },
           loading: () => LoadingWidget(),
           loadMore: () {
             return PhotoListWidget(

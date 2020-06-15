@@ -26,7 +26,7 @@ class CollectionListWidget extends StatelessWidget {
         return false;
       },
       child: ListView.builder(
-        key: PageStorageKey(10),
+        key: PageStorageKey('Collections'),
         itemBuilder: (context, index) {
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
