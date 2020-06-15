@@ -34,7 +34,7 @@ class CollectionListWidget extends StatelessWidget {
               ExtendedNavigator.of(context)
                   .pushNamed(Routes.collectionDetailPage);
             },
-            child: itemWidget(index),
+            child: itemWidget(index,context),
           );
         },
         itemCount: collections.length + 1,
@@ -42,7 +42,7 @@ class CollectionListWidget extends StatelessWidget {
     );
   }
 
-  Widget itemWidget(int index) {
+  Widget itemWidget(int index,BuildContext context) {
     if (index == collections.length) {
       if (hasLoadMore) {
         return Center(
@@ -58,6 +58,9 @@ class CollectionListWidget extends StatelessWidget {
     }
     var collection = collections[index];
     var coverPhoto = collection.coverPhoto;
+
+    double width = MediaQuery.of(context).size.width;
+          double dpr = MediaQuery.of(context).devicePixelRatio;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -66,7 +69,7 @@ class CollectionListWidget extends StatelessWidget {
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
             child: Image.network(
-              coverPhoto.urls.small,
+              coverPhoto.urls.raw+"?width=$width&dpr=$dpr",
               fit: BoxFit.cover,
             ),
           ),

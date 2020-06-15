@@ -38,12 +38,14 @@ class PhotoListWidget extends StatelessWidget {
             return SizedBox();
           }
           var photo = photos[index];
+          double width = MediaQuery.of(context).size.width;
+          double dpr = MediaQuery.of(context).devicePixelRatio;
           return Container(
             color: BACKGROUND_COLORS[index.remainder(BACKGROUND_COLORS.length)],
             child: AspectRatio(
               aspectRatio: photo.width / photo.height,
               child: Image.network(
-                photos[index].urls.small,
+                photos[index].urls.raw+"?w=$width&dpr=$dpr",
                 fit: BoxFit.cover,
               ),
             ),
