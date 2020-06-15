@@ -4,5 +4,5 @@ part of 'collection_bloc.dart';
 @freezed
 abstract class CollectionEvent with _$CollectionEvent{
   const factory CollectionEvent.refresh() = CollectionRefreshEvent;
-  const factory CollectionEvent.loadMore() = CollectionLoadMoreEvent;
+  const factory CollectionEvent.loadMore(int page) = CollectionLoadMoreEvent;
 }

@@ -53,7 +53,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
 
   Future<PhotoState> _loadData({int page = 1}) async {
     try {
-      var data = await GetIt.I<Repository>().photos();
+      var data = await GetIt.I<Repository>().photos(page: page);
       if (data == null) {
         return PhotoState.error('数据为空');
       }

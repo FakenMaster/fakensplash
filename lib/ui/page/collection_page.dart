@@ -33,7 +33,7 @@ class _CollectionPageState extends State<CollectionPage>
             loading: () => LoadingWidget(),
             loadMore: () {
               return CollectionListWidget(
-                collections: context.bloc<CollectionBloc>().photoSuccess.photos,
+                collections: context.bloc<CollectionBloc>().collectionSuccess.collections,
                 hasLoadMore: true,
               );
             },
