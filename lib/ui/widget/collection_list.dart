@@ -72,7 +72,7 @@ class CollectionListWidget extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.symmetric(horizontal:20.0,vertical: 15.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

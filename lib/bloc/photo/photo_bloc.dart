@@ -30,7 +30,9 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
       var currentStateIsError = state is PhotoError;
       print('上次的结果是error吗:$currentStateIsError');
       return isEqual && !currentStateIsError;
-    }).switchMap(transitionFn);
+    }).switchMap(transitionFn)..listen((event) {
+      
+    });
   }
 
   @override
@@ -45,7 +47,9 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
     if (event is PhotoRefreshEvent) {
       yield await _loadData();
     } else if (event is PhotoLoadMoreEvent) {
-      yield await _loadData(page: event.page);
+      var data = await _loadData(page: event.page);
+      print('结果:$data');
+      yield data;
     }
   }
 
@@ -55,6 +59,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   }
 
   Future<PhotoState> _loadData({int page = 1}) async {
+    print('调用接口加载数据: 页码:$page');
     page ??= 1;
     try {
       var data = await GetIt.I<Repository>().photos(page: page);
