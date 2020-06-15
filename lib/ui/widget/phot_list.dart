@@ -42,7 +42,7 @@ class PhotoListWidget extends StatelessWidget {
           double dpr = MediaQuery.of(context).devicePixelRatio;
           print('图片:' + photos[index].urls.raw + "?w=$width&dpr=$dpr");
           return Container(
-            color: BACKGROUND_COLORS[index.remainder(BACKGROUND_COLORS.length)],
+            color: HexColor.fromHex(photo.color),
             child: AspectRatio(
               aspectRatio: photo.width / photo.height,
               child: Image.network(

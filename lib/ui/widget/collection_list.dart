@@ -67,7 +67,7 @@ class CollectionListWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          color: BACKGROUND_COLORS[index.remainder(BACKGROUND_COLORS.length)],
+          color: HexColor.fromHex(coverPhoto.color),
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
             child: Image.network(
