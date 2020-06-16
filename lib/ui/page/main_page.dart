@@ -26,14 +26,14 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   TabController tabController;
   var _tabs = ['Home', 'Collections'];
   final photoMenuData = [
-    Tuple2<IconData, String>(FontAwesomeIcons.chartLine, 'Latest'),
-    Tuple2<IconData, String>(FontAwesomeIcons.history, 'Oldest'),
-    Tuple2<IconData, String>(FontAwesomeIcons.fireAlt, 'Popular'),
+    Tuple2<IconData, String>(Icons.trending_up, 'Latest'),
+    Tuple2<IconData, String>(Icons.history, 'Oldest'),
+    Tuple2<IconData, String>(Icons.whatshot, 'Popular'),
   ];
 
   final collectionMenuData = [
-    Tuple2<IconData, String>(FontAwesomeIcons.feather, 'All'),
-    Tuple2<IconData, String>(FontAwesomeIcons.medal, 'Featureed'),
+    Tuple2<IconData, String>(Icons.terrain, 'All'),
+    Tuple2<IconData, String>(Icons.stars, 'Featureed'),
   ];
   @override
   void initState() {
@@ -52,7 +52,6 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
@@ -104,7 +103,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 .bloc<CollectionBloc>()
                 .add(CollectionEvent.refresh(featured: index == 1));
       },
-      icon: Icon(Icons.format_align_left),
+      icon: Icon(Icons.sort),
       itemBuilder: (context) =>
           (tabController.index == 0 ? photoMenuData : collectionMenuData)
               .asMap()
@@ -117,12 +116,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               Container(
-                width: 20.0,
                 margin: EdgeInsets.only(right: 16.0),
                 alignment: Alignment.center,
-                child: FaIcon(
+                child: Icon(
                   item.item1,
-                  size: 20.0,
                 ),
               ),
               SizedBox(

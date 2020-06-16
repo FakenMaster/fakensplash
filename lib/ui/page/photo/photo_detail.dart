@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tuple/tuple.dart';
 
 class PhotoDetailPage extends StatefulWidget {
   @override
@@ -24,11 +25,11 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
             SliverAppBar(
               actions: <Widget>[
                 IconButton(
-                  icon: FaIcon(FontAwesomeIcons.globe),
+                  icon: Icon(Icons.public),
                   onPressed: () {},
                 ),
                 IconButton(
-                  icon: FaIcon(FontAwesomeIcons.share),
+                  icon: Icon(Icons.share),
                   onPressed: () {},
                 )
               ],
@@ -52,9 +53,67 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                         PhotoDetailEvent.loadData(context.watch<Photo>().id));
                     return Container();
                   },
-                  loading: () => LoadingWidget(center: false,),
+                  loading: () => LoadingWidget(
+                    center: false,
+                  ),
                   error: (error) => LoadErrorWidget(error: error),
-                  success: (Photo photo) => Text('有数据了'),
+                  success: (Photo photo) {
+                    List<Tuple2<IconData, String>> data = [
+                      Tuple2(
+                          Icons.date_range, photo.updatedAt.toIso8601String()),
+                      Tuple2(Icons.favorite, '${photo.likes} Likes'),
+                      Tuple2(
+                          Icons.file_download, '${photo.downloads} Downloads'),
+                      Tuple2(Icons.palette, '${photo.color}')
+                    ];
+                    return Column(
+                      children: [
+                        Container(
+                          height: 50.0,
+                          width: double.infinity,
+                          color: Colors.grey,
+                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                backgroundImage:
+                                    NetworkImage(photo.user.profileImage.small),
+                              ),
+                              SizedBox(
+                                width: 40.0,
+                              ),
+                              Text('By ${photo.user.name}'),
+                              Spacer(),
+                              IconButton(
+                                  onPressed: () {}, icon: Icon(Icons.favorite)),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(Icons.bookmark_border)),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              Text('${photo.description}'),
+                              ...data.map((tuple) {
+                                return Row(
+                                  children: [
+                                    Icon(tuple.item1),
+                                    SizedBox(
+                                      width: 40.0,
+                                    ),
+                                    Text(tuple.item2),
+                                  ],
+                                );
+                              }).toList(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 );
               },
             )),
