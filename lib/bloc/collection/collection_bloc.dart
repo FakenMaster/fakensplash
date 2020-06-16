@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../model/collection.dart';
 import '../../repository/repository.dart';
 
 part 'collection_event.dart';
@@ -16,7 +15,7 @@ part 'collection_bloc.freezed.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionSuccess _collectionSuccess;
-
+  bool featured = false;
   CollectionSuccess get collectionSuccess => _collectionSuccess;
 
   @override
@@ -26,10 +25,12 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   Stream<Transition<CollectionEvent, CollectionState>> transformEvents(
       Stream<CollectionEvent> events, transitionFn) {
     return events.distinct((previous, current) {
-      var isEqual = current != null && current is! CollectionRefreshEvent && previous == current;
-      print('请求相同吗:$isEqual');
+      var isEqual = current != null &&
+          current is! CollectionRefreshEvent &&
+          previous == current;
+      // print('请求相同吗:$isEqual');
       var currentStateIsError = state is CollectionError;
-      print('上次的结果是error吗:$currentStateIsError');
+      // print('上次的结果是error吗:$currentStateIsError');
       return isEqual && !currentStateIsError;
     }).switchMap(transitionFn);
   }
@@ -44,6 +45,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       yield CollectionLoading();
     }
     if (event is CollectionRefreshEvent) {
+      if (event.featured != null) {
+        featured = event.featured;
+      }
       yield await _loadData();
     } else if (event is CollectionLoadMoreEvent) {
       var data = await _loadData(page: event.page);
@@ -52,7 +56,6 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   }
 
   loadMore() async {
-    //_loadData(page: _photoSuccess.page + 1);
     // should use rxdart to detect repeat same request.
     print('加载更多：${_collectionSuccess.page + 1}');
     add(CollectionLoadMoreEvent(_collectionSuccess.page + 1));
@@ -60,7 +63,8 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
 
   Future<CollectionState> _loadData({int page = 1}) async {
     try {
-      var data = await GetIt.I<Repository>().collections(page: page);
+      var data = await GetIt.I<Repository>()
+          .collections(page: page, featured: featured);
       if (data == null) {
         return CollectionState.error('数据为空');
       }

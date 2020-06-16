@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:fakensplash/model/photo.dart';
+import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
@@ -17,7 +17,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   // save latest load success data
   PhotoSuccess _photoSuccess;
   PhotoSuccess get photoSuccess => _photoSuccess;
-
+  String orderBy;
   @override
   PhotoState get initialState => PhotoInitial();
 
@@ -25,14 +25,15 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   Stream<Transition<PhotoEvent, PhotoState>> transformEvents(
       Stream<PhotoEvent> events, transitionFn) {
     return events.distinct((previous, current) {
-      var isEqual = current != null && current is! PhotoRefreshEvent && previous == current;
-      print('请求相同吗:$isEqual');
+      var isEqual = current != null &&
+          current is! PhotoRefreshEvent &&
+          previous == current;
+      // print('请求相同吗:$isEqual');
       var currentStateIsError = state is PhotoError;
-      print('上次的结果是error吗:$currentStateIsError');
+      // print('上次的结果是error吗:$currentStateIsError');
       return isEqual && !currentStateIsError;
-    }).switchMap(transitionFn)..listen((event) {
-      
-    });
+    }).switchMap(transitionFn)
+      ..listen((event) {});
   }
 
   @override
@@ -45,6 +46,9 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
       yield PhotoLoading();
     }
     if (event is PhotoRefreshEvent) {
+      if (event.orderBy != null) {
+        orderBy = event.orderBy;
+      }
       yield await _loadData();
     } else if (event is PhotoLoadMoreEvent) {
       var data = await _loadData(page: event.page);
@@ -59,10 +63,11 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   }
 
   Future<PhotoState> _loadData({int page = 1}) async {
-    print('调用接口加载数据: 页码:$page');
+    print('调用接口加载数据: 页码:$page,排序类型:$orderBy');
     page ??= 1;
     try {
-      var data = await GetIt.I<Repository>().photos(page: page);
+      var data =
+          await GetIt.I<Repository>().photos(page: page, orderBy: orderBy);
       print('data数据类型:$data');
       if (data == null) {
         return PhotoState.error('数据为空');

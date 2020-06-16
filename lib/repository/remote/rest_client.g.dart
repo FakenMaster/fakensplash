@@ -41,6 +41,103 @@ class _RestClient implements RestClient {
   }
 
   @override
+  photoDetail(id) async {
+    ArgumentError.checkNotNull(id, 'id');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/photos/$id',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = Photo.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  photoStatistics(id, {resolution = 'days', quantity = 30}) async {
+    ArgumentError.checkNotNull(id, 'id');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'resolution': resolution,
+      r'quantity': quantity
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/phtos/$id/statistics',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = Photo.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  trackDownload(id) async {
+    ArgumentError.checkNotNull(id, 'id');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/photos/$id/download',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = Photo.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  searchPhoto(query,
+      {page,
+      perPage,
+      orderBy,
+      collectionIds,
+      contentFilter = 'high',
+      color,
+      orientation}) async {
+    ArgumentError.checkNotNull(query, 'query');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'page': page,
+      r'per_page': perPage,
+      r'order_by': orderBy,
+      r'collections': collectionIds,
+      r'content_filter': contentFilter,
+      r'color': color,
+      r'orientation': orientation
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/search/photos',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = PhotoSearchResult.fromJson(_result.data);
+    return value;
+  }
+
+  @override
   collections({page = 1, perPage = 10}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -50,6 +147,49 @@ class _RestClient implements RestClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final Response<List<dynamic>> _result = await _dio.request('/collections',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    var value = _result.data
+        .map((dynamic i) => Collection.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  collectionDetail(id) async {
+    ArgumentError.checkNotNull(id, 'id');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/collections/$id',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = Collection.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  featuredCollections({page = 1, perPage = 10}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'per_page': perPage
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<List<dynamic>> _result = await _dio.request(
+        '/collections/featured',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',

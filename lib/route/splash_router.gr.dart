@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/ui/page/main_page.dart';
-import 'package:fakensplash/ui/page/collection_detail.dart';
+import 'package:fakensplash/ui/page/collection/collection_detail.dart';
 
 abstract class Routes {
   static const mainPage = '/';

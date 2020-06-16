@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:fakensplash/model/model.dart';
-import 'package:fakensplash/model/photo.dart';
 import 'package:get_it/get_it.dart';
 
 import 'remote/rest_client.dart';
@@ -18,11 +17,16 @@ class Repository {
     });
   }
 
-  Future<List<Photo>> photos({int page = 1}) async {
-    return GetIt.I<RestClient>().photos(page: page);
+  Future<List<Photo>> photos({int page = 1, String orderBy}) async {
+    return GetIt.I<RestClient>()
+        .photos(page: page ?? 1, orderBy: orderBy ?? 'latest');
   }
 
-  Future<List<Collection>> collections({int page = 1}) async {
+  Future<List<Collection>> collections(
+      {int page = 1, bool featured = false}) async {
+    if (featured) {
+      return GetIt.I<RestClient>().featuredCollections(page: page);
+    }
     return GetIt.I<RestClient>().collections(page: page);
   }
 }

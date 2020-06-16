@@ -1,51 +1,49 @@
-import 'package:fakensplash/bloc/photo/photo_bloc.dart';
+import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/ui/widget/collection_list.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
 import 'package:fakensplash/ui/widget/loading_widget.dart';
-import 'package:fakensplash/ui/widget/phot_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/photo/photo_bloc.dart';
 
-class PhotoPage extends StatefulWidget {
+class CollectionPage extends StatefulWidget {
   @override
-  _PhotoPageState createState() => _PhotoPageState();
+  _CollectionPageState createState() => _CollectionPageState();
 }
 
-class _PhotoPageState extends State<PhotoPage>
+class _CollectionPageState extends State<CollectionPage>
     with AutomaticKeepAliveClientMixin {
-  PhotoBloc bloc;
+  CollectionBloc bloc;
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<PhotoBloc>();
+    bloc = context.bloc<CollectionBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PhotoBloc, PhotoState>(
+    return BlocBuilder<CollectionBloc, CollectionState>(
       builder: (context, state) {
         return state.when(
           initial: () {
-            bloc.add(PhotoEvent.refresh());
+            bloc.add(CollectionEvent.refresh());
             return Container();
           },
           loading: () => LoadingWidget(),
           loadMore: () {
-            return PhotoListWidget(
-              photos: bloc.photoSuccess.photos,
+            return CollectionListWidget(
+              collections: bloc.collectionSuccess.collections,
               hasLoadMore: true,
             );
           },
           error: (error) => LoadErrorWidget(
-              error: error,
-              clickCallback: () => bloc.add(
-                    PhotoRefreshEvent(),
-                  )),
-          success: (int page, List<Photo> photos) =>
-              PhotoListWidget(photos: photos),
+            error: error,
+            clickCallback: () => bloc.add(CollectionRefreshEvent()),
+          ),
+          success: (int pageNo, List<Collection> collections) =>
+              CollectionListWidget(collections: collections),
         );
       },
     );

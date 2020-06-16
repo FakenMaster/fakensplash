@@ -1,15 +1,16 @@
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
-import 'package:fakensplash/ui/page/collection_page.dart';
-import 'package:fakensplash/ui/page/photo_page.dart';
+import 'package:fakensplash/ui/page/collection/collection_page.dart';
+import 'package:fakensplash/ui/page/photo/photo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extended;
+import 'package:tuple/tuple.dart';
 
 import '../../repository/repository.dart';
 
@@ -23,6 +24,16 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   TabController tabController;
   var _tabs = ['Home', 'Collections'];
+  final photoMenuData = [
+    Tuple2<IconData, String>(FontAwesomeIcons.chartLine, 'Latest'),
+    Tuple2<IconData, String>(FontAwesomeIcons.history, 'Oldest'),
+    Tuple2<IconData, String>(FontAwesomeIcons.fireAlt, 'Popular'),
+  ];
+
+  final collectionMenuData = [
+    Tuple2<IconData, String>(FontAwesomeIcons.feather, 'All'),
+    Tuple2<IconData, String>(FontAwesomeIcons.medal, 'Featureed'),
+  ];
   @override
   void initState() {
     super.initState();
@@ -40,47 +51,27 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => PhotoBloc(),
-        ),
-        BlocProvider(
-          create: (_) => CollectionBloc(),
-        )
-      ],
-      child: Scaffold(
-        body: SafeArea(
-          child: DefaultTabController(
-            length: 2,
-            child: extended.NestedScrollView(
-              pinnedHeaderSliverHeightBuilder: () => kTextTabBarHeight,
-              innerScrollPositionKeyBuilder: () {
-                return Key(_tabs[tabController.index]);
-              },
-              headerSliverBuilder:
-                  (BuildContext context, bool innerBoxIsScrolled) {
-                return <Widget>[
-                  appBar(),
-                  tabTitle(),
-                ];
-              },
-              body: Builder(builder: (context)=>tabBarContent(context)),
-            ),
+    return Scaffold(
+      body: SafeArea(
+        child: DefaultTabController(
+          length: 2,
+          child: extended.NestedScrollView(
+            pinnedHeaderSliverHeightBuilder: () => kTextTabBarHeight,
+            innerScrollPositionKeyBuilder: () {
+              return Key(_tabs[tabController.index]);
+            },
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                appBar(),
+                tabTitle(),
+              ];
+            },
+            body: tabBarContent(),
           ),
         ),
-        drawer: drawer(),
       ),
-    );
-  }
-
-  Widget customScroll() {
-    return CustomScrollView(
-      slivers: [
-        appBar(),
-        tabTitle(),
-        tabBarContent(context),
-      ],
+      drawer: drawer(),
     );
   }
 
@@ -91,16 +82,56 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       title: Text('FaKenSplash'),
       actions: [
         IconButton(
-          icon: Icon(
-            Icons.search,
+          icon: FaIcon(
+            FontAwesomeIcons.search,
           ),
           onPressed: () {},
         ),
-        IconButton(
-          icon: FaIcon(FontAwesomeIcons.alignLeft),
-          onPressed: () {},
-        ),
+        popupMenu(),
       ],
+    );
+  }
+
+  Widget popupMenu() {
+    return PopupMenuButton(
+      onSelected: (int index) {
+        tabController.index == 0
+            ? context
+                .bloc<PhotoBloc>()
+                .add(PhotoEvent.refresh(orderBy: photoMenuData[index].item2.toLowerCase()))
+            : context
+                .bloc<CollectionBloc>()
+                .add(CollectionEvent.refresh(featured: index == 1));
+      },
+      icon: FaIcon(FontAwesomeIcons.alignLeft),
+      itemBuilder: (context) =>
+          (tabController.index == 0 ? photoMenuData : collectionMenuData)
+              .asMap()
+              .entries
+              .map((MapEntry entry) {
+        int key = entry.key;
+        Tuple2 item = entry.value;
+        return PopupMenuItem<int>(
+          value: key,
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 20.0,
+                margin: EdgeInsets.only(right: 16.0),
+                alignment: Alignment.center,
+                child: FaIcon(
+                  item.item1,
+                  size: 20.0,
+                ),
+              ),
+              SizedBox(
+                width: 16.0,
+              ),
+              Text(item.item2),
+            ],
+          ),
+        );
+      }).toList(),
     );
   }
 
@@ -132,7 +163,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     );
   }
 
-  Widget tabBarContent(BuildContext context) {
+  Widget tabBarContent() {
     return TabBarView(
       controller: tabController,
       children: [
@@ -222,7 +253,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
 class HomeTitleTabHeader extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
+
   HomeTitleTabHeader(this.tabBar);
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
