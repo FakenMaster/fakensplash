@@ -12,44 +12,43 @@ import '../../bloc/collection/collection_bloc.dart';
 import '../widget/loading_widget.dart';
 
 class CollectionPage extends StatefulWidget {
-  CollectionPage({Key key}) : super(key: key);
   @override
   _CollectionPageState createState() => _CollectionPageState();
 }
 
 class _CollectionPageState extends State<CollectionPage>
     with AutomaticKeepAliveClientMixin {
+  CollectionBloc bloc;
   @override
   void initState() {
     super.initState();
-    context.bloc<CollectionBloc>().add(CollectionEvent.refresh());
+    bloc = context.bloc<CollectionBloc>();
   }
 
   @override
   Widget build(BuildContext context) {
-    var bloc = context.bloc<CollectionBloc>();
-
-    return RefreshIndicator(
-      onRefresh: () async {
-        bloc.add(CollectionEvent.refresh());
+    return BlocBuilder<CollectionBloc, CollectionState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () {
+            bloc.add(CollectionEvent.refresh());
+            return Container();
+          },
+          loading: () => LoadingWidget(),
+          loadMore: () {
+            return CollectionListWidget(
+              collections: bloc.collectionSuccess.collections,
+              hasLoadMore: true,
+            );
+          },
+          error: (error) => LoadErrorWidget(
+            error: error,
+            clickCallback: () => bloc.add(CollectionRefreshEvent()),
+          ),
+          success: (int pageNo, List<Collection> collections) =>
+              CollectionListWidget(collections: collections),
+        );
       },
-      child: BlocBuilder<CollectionBloc, CollectionState>(
-        builder: (context, state) {
-          return state.when(
-            initial: () => Container(),
-            loading: () => LoadingWidget(),
-            loadMore: () {
-              return CollectionListWidget(
-                collections: bloc.collectionSuccess.collections,
-                hasLoadMore: true,
-              );
-            },
-            error: (error) => LoadErrorWidget(error:error,clickCallback: ()=>bloc.add(CollectionRefreshEvent()),),
-            success: (int pageNo, List<Collection> collections) =>
-                CollectionListWidget(collections: collections),
-          );
-        },
-      ),
     );
   }
 

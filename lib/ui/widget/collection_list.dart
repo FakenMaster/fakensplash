@@ -26,7 +26,7 @@ class CollectionListWidget extends StatelessWidget {
         return false;
       },
       child: ListView.builder(
-        key: PageStorageKey(10),
+        key: PageStorageKey('Collections'),
         itemBuilder: (context, index) {
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
@@ -61,17 +61,17 @@ class CollectionListWidget extends StatelessWidget {
 
     double width = MediaQuery.of(context).size.width;
     double dpr = MediaQuery.of(context).devicePixelRatio;
-    print('图片:' + coverPhoto.urls.raw + "?w=$width&dpr=$dpr");
+    // print('图片:' + coverPhoto.urls.raw + "&w=$width&dpr=$dpr");
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          color: BACKGROUND_COLORS[index.remainder(BACKGROUND_COLORS.length)],
+          color: HexColor.fromHex(coverPhoto.color),
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
             child: Image.network(
-              coverPhoto.urls.raw + "?width=$width&dpr=$dpr",
+              coverPhoto.urls.small,
               fit: BoxFit.cover,
             ),
           ),

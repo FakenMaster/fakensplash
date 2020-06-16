@@ -26,7 +26,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   Stream<Transition<CollectionEvent, CollectionState>> transformEvents(
       Stream<CollectionEvent> events, transitionFn) {
     return events.distinct((previous, current) {
-      var isEqual = previous != null && previous == current;
+      var isEqual = current != null && current is! CollectionRefreshEvent && previous == current;
       print('请求相同吗:$isEqual');
       var currentStateIsError = state is CollectionError;
       print('上次的结果是error吗:$currentStateIsError');
