@@ -1,13 +1,13 @@
-import 'package:fakensplash/bloc/collection/bloc/collection_bloc.dart';
+import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/ui/page/collection_page.dart';
 import 'package:fakensplash/ui/page/photo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../repository/repository.dart';
 
@@ -196,7 +196,9 @@ class _MainPageState extends State<MainPage> {
 
 class HomeTitleTabHeader extends SliverPersistentHeaderDelegate {
   final TabBar tabBar;
+
   HomeTitleTabHeader(this.tabBar);
+
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {

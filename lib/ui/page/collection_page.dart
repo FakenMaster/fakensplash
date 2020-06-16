@@ -1,4 +1,4 @@
-import 'package:fakensplash/bloc/collection/bloc/collection_bloc.dart';
+import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/widget/collection_list.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/collection/bloc/collection_bloc.dart';
-import '../../bloc/collection/bloc/collection_bloc.dart';
+import '../../bloc/collection/collection_bloc.dart';
+import '../../bloc/collection/collection_bloc.dart';
 import '../widget/loading_widget.dart';
 
 class CollectionPage extends StatefulWidget {

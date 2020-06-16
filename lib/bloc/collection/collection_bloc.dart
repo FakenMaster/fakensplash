@@ -7,8 +7,8 @@ import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 import 'package:rxdart/rxdart.dart';
 
-import '../../../model/collection.dart';
-import '../../../repository/repository.dart';
+import '../../model/collection.dart';
+import '../../repository/repository.dart';
 
 part 'collection_event.dart';
 part 'collection_state.dart';
