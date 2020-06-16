@@ -22,6 +22,10 @@ class Repository {
         .photos(page: page ?? 1, orderBy: orderBy ?? 'latest');
   }
 
+  Future<Photo> photoDetail(String id) async {
+    return GetIt.I<RestClient>().photoDetail(id);
+  }
+
   Future<List<Collection>> collections(
       {int page = 1, bool featured = false}) async {
     if (featured) {

@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
+import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:fakensplash/ui/page/photo/photo_detail.dart';
@@ -52,8 +53,15 @@ class PhotoListWidget extends StatelessWidget {
               onTap: () {
                 ExtendedNavigator.of(context).push(MaterialPageRoute(
                   builder: (_) {
-                    return Provider(
-                      create: (_) => photo,
+                    return MultiProvider(
+                      providers: [
+                        Provider(
+                          create: (_) => photo,
+                        ),
+                        BlocProvider(
+                          create: (_) => PhotoDetailBloc(),
+                        )
+                      ],
                       child: PhotoDetailPage(),
                     );
                   },

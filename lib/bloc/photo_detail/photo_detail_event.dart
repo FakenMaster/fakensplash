@@ -1,4 +1,7 @@
 part of 'photo_detail_bloc.dart';
 
 @immutable
-abstract class PhotoDetailEvent {}
+@freezed
+abstract class PhotoDetailEvent with _$PhotoDetailEvent {
+  const factory PhotoDetailEvent.loadData(String id) = PhotoDetailLoadEvent;
+}
