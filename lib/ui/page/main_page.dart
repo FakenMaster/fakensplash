@@ -5,6 +5,7 @@ import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/ui/page/collection/collection_page.dart';
 import 'package:fakensplash/ui/page/photo/photo_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -51,6 +52,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: SafeArea(
         child: DefaultTabController(
@@ -82,8 +84,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
       title: Text('FaKenSplash'),
       actions: [
         IconButton(
-          icon: FaIcon(
-            FontAwesomeIcons.search,
+          icon: Icon(
+            Icons.search,
           ),
           onPressed: () {},
         ),
@@ -96,14 +98,13 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return PopupMenuButton(
       onSelected: (int index) {
         tabController.index == 0
-            ? context
-                .bloc<PhotoBloc>()
-                .add(PhotoEvent.refresh(orderBy: photoMenuData[index].item2.toLowerCase()))
+            ? context.bloc<PhotoBloc>().add(PhotoEvent.refresh(
+                orderBy: photoMenuData[index].item2.toLowerCase()))
             : context
                 .bloc<CollectionBloc>()
                 .add(CollectionEvent.refresh(featured: index == 1));
       },
-      icon: FaIcon(FontAwesomeIcons.alignLeft),
+      icon: Icon(Icons.format_align_left),
       itemBuilder: (context) =>
           (tabController.index == 0 ? photoMenuData : collectionMenuData)
               .asMap()

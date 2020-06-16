@@ -3,6 +3,7 @@ import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
@@ -13,6 +14,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+      statusBarColor: Color(0xfff5f6fa),
+      systemNavigationBarColor: Color(0xfff5f6fa),
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
     return MultiBlocProvider(
       providers: [
         BlocProvider(

@@ -9,13 +9,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/ui/page/main_page.dart';
 import 'package:fakensplash/ui/page/collection/collection_detail.dart';
+import 'package:fakensplash/ui/page/photo/photo_detail.dart';
 
 abstract class Routes {
   static const mainPage = '/';
   static const collectionDetailPage = '/collection-detail-page';
+  static const photoDetailPage = '/photo-detail-page';
   static const all = {
     mainPage,
     collectionDetailPage,
+    photoDetailPage,
   };
 }
 
@@ -40,8 +43,25 @@ class SplashRouter extends RouterBase {
           builder: (context) => CollectionDetailPage(),
           settings: settings,
         );
+      case Routes.photoDetailPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => PhotoDetailPage(),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
   }
+}
+
+// *************************************************************************
+// Navigation helper methods extension
+// **************************************************************************
+
+extension SplashRouterNavigationHelperMethods on ExtendedNavigatorState {
+  Future pushMainPage() => pushNamed(Routes.mainPage);
+
+  Future pushCollectionDetailPage() => pushNamed(Routes.collectionDetailPage);
+
+  Future pushPhotoDetailPage() => pushNamed(Routes.photoDetailPage);
 }
