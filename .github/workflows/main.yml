@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-    - '1.0.0'
+    - 'v1.0.0'
 name: Test, Build and Release apk
 jobs:
   build:
