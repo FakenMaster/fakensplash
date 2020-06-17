@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'FakenSplash',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Colors.white,
