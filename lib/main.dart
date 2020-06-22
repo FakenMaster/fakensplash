@@ -2,16 +2,18 @@ import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/route/splash_router.gr.dart';
+import 'package:fakensplash/ui/page/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wiredash/wiredash.dart';
 
 void main() {
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
+  final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -28,16 +30,24 @@ class MyApp extends StatelessWidget {
           create: (_) => CollectionBloc(),
         )
       ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primaryColor: Colors.white,
-          accentColor: Colors.black,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        builder: (context, child) => ExtendedNavigator(
-          router: SplashRouter(),
+      child: Wiredash(
+        projectId: 'fakensplash-k2gyhjm',
+        secret: 'pszdeapx8xfs08u7833odbwi4fd21who',
+        navigatorKey: _navigatorKey,
+        child: MaterialApp(
+          // navigatorKey: _navigatorKey,
+          title: 'FakenSplash',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.white,
+            accentColor: Colors.black,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          // home: MainPage(),
+          builder: (context, child) => ExtendedNavigator(
+            key: _navigatorKey,
+            router: SplashRouter(),
+          ),
         ),
       ),
     );
