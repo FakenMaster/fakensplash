@@ -307,29 +307,51 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return Scaffold(
-            body: Column(
-              children: <Tuple2<IconData, String>>[
-                Tuple2(Icons.straighten,
-                    'Dimensions:${photo.width} x ${photo.height}'),
-                Tuple2(Icons.image, 'Make: ${photoExif?.make}'),
-                Tuple2(Icons.camera_alt, 'Model: ${photoExif.model}'),
-                Tuple2(Icons.timelapse,
-                    'Exposure time: ${photoExif.exposureTime}'),
-                Tuple2(Icons.camera, 'Aperture: ${photoExif.aperture}'),
-                Tuple2(Icons.iso, 'ISO: ${photoExif.iso}'),
-                Tuple2(Icons.all_out, 'Focal length: ${photoExif.focalLength}'),
-              ].map((e) {
-                return Row(
-                  children: <Widget>[
-                    Icon(e.item1),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(e.item2),
-                  ],
-                );
-              }).toList(),
+          String _checkNull(dynamic checkStr, String prefix,
+              {String defaultStr = '-----'}) {
+            if (checkStr == null || checkStr.toString().trim().isEmpty) {
+              return defaultStr;
+            }
+            return '$prefix$checkStr';
+          }
+
+          return Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Tuple2<IconData, String>>[
+                  Tuple2(Icons.straighten,
+                      'Dimensions:${photo.width} x ${photo.height}'),
+                  Tuple2(Icons.image, _checkNull(photoExif.make, 'Make: ')),
+                  Tuple2(
+                      Icons.camera_alt, _checkNull(photoExif.model, 'Model: ')),
+                  Tuple2(Icons.timelapse,
+                      _checkNull(photoExif.exposureTime, 'Exposure time: ')),
+                  Tuple2(Icons.camera,
+                      _checkNull(photoExif.aperture, 'Aperture: ')),
+                  Tuple2(Icons.iso, _checkNull(photoExif.iso, 'ISO: ')),
+                  Tuple2(Icons.all_out,
+                      _checkNull(photoExif.focalLength, 'Focal length: ')),
+                ].map((e) {
+                  return Column(
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(e.item1),
+                          SizedBox(
+                            width: 20,
+                          ),
+                          Text(e.item2),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 15.0,
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
             ),
           );
         });
