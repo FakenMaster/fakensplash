@@ -7,7 +7,6 @@ import 'package:fakensplash/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
@@ -19,6 +18,8 @@ class PhotoDetailPage extends StatefulWidget {
 }
 
 class _PhotoDetailPageState extends State<PhotoDetailPage> {
+  bool actionVisible = false;
+
   @override
   Widget build(BuildContext context) {
     var photo = context.watch<Photo>();
@@ -115,8 +116,12 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                     SizedBox(
                                       width: 20.0,
                                     ),
-                                    Text('By ${photoDetail.user.name}'),
-                                    Spacer(),
+                                    Expanded(
+                                        child: Text(
+                                      'By ${photoDetail.user.name}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    )),
                                     IconButton(
                                         onPressed: () {},
                                         icon: Icon(Icons.favorite_border)),
@@ -183,12 +188,153 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
       ),
       floatingActionButton: Visibility(
         visible: context.bloc<PhotoDetailBloc>().state is PhotoDetailSuccess,
-        child: FloatingActionButton(
-          child: Icon(
-            Icons.keyboard_arrow_up,
-            color: Colors.white,
-          ),
-          onPressed: () {},
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: <Widget>[
+            AnimatedOpacity(
+              duration: Duration(milliseconds: 200),
+              opacity: actionVisible ? 1.0 : 0.0,
+              child: Column(
+                children: <Widget>[
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 6.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          'Stats',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: FloatingActionButton(
+                          mini: true,
+                          heroTag: 'Stats',
+                          onPressed: () {},
+                          child: Icon(Icons.timeline),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4.0,
+                            horizontal: 6.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            'Info',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          )),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: FloatingActionButton(
+                          heroTag: 'Info',
+                          mini: true,
+                          onPressed: () {},
+                          child: Icon(Icons.info_outline),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 6.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          'Set as wallpaper',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: FloatingActionButton(
+                          heroTag: 'Set as wallpaper',
+                          mini: true,
+                          onPressed: () {},
+                          child: Icon(Icons.wallpaper),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          vertical: 4.0,
+                          horizontal: 6.0,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        child: Text(
+                          'Download',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(4.0),
+                        child: FloatingActionButton(
+                          heroTag: 'Download',
+                          onPressed: () {},
+                          mini: true,
+                          child: Icon(Icons.file_download),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            FloatingActionButton(
+              heroTag: 'actions',
+              child: RotatedBox(
+                quarterTurns: actionVisible ? 2 : 0,
+                child: Icon(
+                  Icons.keyboard_arrow_up,
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  actionVisible = !actionVisible;
+                });
+              },
+            ),
+          ],
         ),
       ),
     );
