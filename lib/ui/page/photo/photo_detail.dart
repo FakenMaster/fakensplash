@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
@@ -11,7 +13,6 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
-import 'dart:ui' as ui;
 
 class PhotoDetailPage extends StatefulWidget {
   @override
@@ -234,125 +235,45 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
           opacity: actionVisible ? 1.0 : 0.0,
           child: Column(
             children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 6.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Text(
-                      'Stats',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FloatingActionButton(
-                      mini: true,
-                      heroTag: 'Stats',
-                      onPressed: () {},
-                      child: Icon(Icons.timeline),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                      padding: EdgeInsets.symmetric(
-                        vertical: 4.0,
-                        horizontal: 6.0,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(4.0),
-                      ),
-                      child: Text(
-                        'Info',
-                        style: TextStyle(
-                          color: Colors.white,
+              ...<Tuple3<String, IconData, VoidCallback>>[
+                Tuple3('Stats', Icons.timeline, () {}),
+                Tuple3('Info', Icons.info_outline, showInfoDialog),
+                Tuple3('Set as wallpaper', Icons.wallpaper, () {}),
+                Tuple3('Download', Icons.file_download, () {})
+              ]
+                  .map(
+                    (e) => Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 4.0,
+                            horizontal: 6.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.black,
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          child: Text(
+                            e.item1,
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FloatingActionButton(
-                      heroTag: 'Info',
-                      mini: true,
-                      onPressed: () {},
-                      child: Icon(Icons.info_outline),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: FloatingActionButton(
+                            mini: true,
+                            heroTag: e.item1,
+                            onPressed: e.item3,
+                            child: Icon(e.item2),
+                          ),
+                        )
+                      ],
                     ),
                   )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 6.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Text(
-                      'Set as wallpaper',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: FloatingActionButton(
-                      heroTag: 'Set as wallpaper',
-                      mini: true,
-                      onPressed: () {},
-                      child: Icon(Icons.wallpaper),
-                    ),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 4.0,
-                      horizontal: 6.0,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(4.0),
-                    ),
-                    child: Text(
-                      'Download',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(4.0),
-                    child: FloatingActionButton(
-                      heroTag: 'Download',
-                      onPressed: () {},
-                      mini: true,
-                      child: Icon(Icons.file_download),
-                    ),
-                  )
-                ],
-              ),
+                  .toList(),
             ],
           ),
         ),
@@ -373,5 +294,44 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
         ),
       ],
     );
+  }
+
+  showInfoDialog() {
+    setState(() {
+      actionVisible = false;
+    });
+    var photo =
+        (context.bloc<PhotoDetailBloc>().state as PhotoDetailSuccess).photo;
+    var photoExif = photo.exif;
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return Scaffold(
+            body: Column(
+              children: <Tuple2<IconData, String>>[
+                Tuple2(Icons.straighten,
+                    'Dimensions:${photo.width} x ${photo.height}'),
+                Tuple2(Icons.image, 'Make: ${photoExif?.make}'),
+                Tuple2(Icons.camera_alt, 'Model: ${photoExif.model}'),
+                Tuple2(Icons.timelapse,
+                    'Exposure time: ${photoExif.exposureTime}'),
+                Tuple2(Icons.camera, 'Aperture: ${photoExif.aperture}'),
+                Tuple2(Icons.iso, 'ISO: ${photoExif.iso}'),
+                Tuple2(Icons.all_out, 'Focal length: ${photoExif.focalLength}'),
+              ].map((e) {
+                return Row(
+                  children: <Widget>[
+                    Icon(e.item1),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Text(e.item2),
+                  ],
+                );
+              }).toList(),
+            ),
+          );
+        });
   }
 }
