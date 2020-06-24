@@ -17,6 +17,13 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   Stream<UserProfileState> mapEventToState(
     UserProfileEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    yield UserProfileState.loading();
+    if(event is UserProfileLoad){
+      yield await loadData(event.username);
+    }
+  }
+
+  Future<UserProfileState> loadData(String username) async{
+
   }
 }

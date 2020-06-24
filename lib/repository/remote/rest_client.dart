@@ -14,12 +14,12 @@ abstract class RestClient {
     @Query('per_page') int perPage = 10,
     @Query('order_by') String orderBy = 'latest',
   });
+
   @GET('/photos/{id}')
   Future<Photo> photoDetail(@Path('id') String id);
 
   @GET('/photos/{id}/statistics')
-  Future<PhotoStatistics> photoStatistics(
-    @Path('id') String id, {
+  Future<PhotoStatistics> photoStatistics(@Path('id') String id, {
     @Query('resolution') String resolution = 'days',
     @Query('quantity') int quantity = 30,
   });
@@ -28,8 +28,7 @@ abstract class RestClient {
   Future<Photo> trackDownload(@Path('id') String id);
 
   @GET('/search/photos')
-  Future<PhotoSearchResult> searchPhoto(
-    @Query('query') String query, {
+  Future<PhotoSearchResult> searchPhoto(@Query('query') String query, {
     @Query('page') int page,
     @Query('per_page') int perPage,
     @Query('order_by') String orderBy,
@@ -54,5 +53,17 @@ abstract class RestClient {
   Future<List<Collection>> featuredCollections({
     @Query('page') int page = 1,
     @Query('per_page') int perPage = 10,
+  });
+
+  @GET('/users/{username}/photos')
+  Future<List<Photo>> userPhotos({
+    @Path('username') String username,
+    @Query('page') int page = 1,
+    @Query('per_page') int perPage = 30,
+    @Query('order_by') String orderBy = 'latest',
+    @Query('stats') bool stats = false,
+    @Query('resolution') String resolution = 'days',
+    @Query('quantity') int quantity = 30,
+    @Query('orientation') String orientation = '',
   });
 }

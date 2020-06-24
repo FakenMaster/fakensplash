@@ -1,11 +1,12 @@
+import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
+    as extended;
 import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/widget/persistent_title_tab_bar.dart';
 import 'package:fakensplash/util/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
-    as extended;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:tuple/tuple.dart';
@@ -77,6 +78,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     return BlocBuilder<UserProfileBloc, UserProfileState>(
       builder: (context, state) {
         var user = context.watch<User>();
+        print('用户信息:${user.toJson().toString()}');
         return SliverPadding(
             padding: const EdgeInsets.symmetric(
               horizontal: 20.0,
@@ -110,10 +112,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                             if (user.portfolioUrl != null)
                               Tuple2(Icons.public, user.portfolioUrl),
                           ].map((e) {
+                            bool isUrl = e.item1 == Icons.public;
                             return GestureDetector(
-                              onTap: () {
-                                launchUrl(e.item2);
-                              },
+                              onTap: isUrl ? () => launchUrl(e.item2) : null,
                               child: Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 4.0),
@@ -131,7 +132,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                                         e.item2,
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                          decoration: TextDecoration.underline,
+                                          decoration: isUrl
+                                              ? TextDecoration.underline
+                                              : TextDecoration.none,
                                         ),
                                       ),
                                     ),
@@ -144,6 +147,13 @@ class _UserProfilePageState extends State<UserProfilePage>
                       ),
                     ),
                   ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Text(
+                    user.bio,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               ]),
             ));
@@ -159,13 +169,13 @@ class _UserProfilePageState extends State<UserProfilePage>
           controller: _tabController,
           labelStyle: TextStyle(
             fontFamily: 'Raleway',
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.w600,
             color: Colors.black,
           ),
           unselectedLabelStyle: TextStyle(
             fontFamily: 'Raleway',
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.w400,
             color: Colors.black,
           ),

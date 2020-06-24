@@ -202,4 +202,41 @@ class _RestClient implements RestClient {
         .toList();
     return value;
   }
+
+  @override
+  userPhotos(
+      {username,
+      page = 1,
+      perPage = 30,
+      orderBy = 'latest',
+      stats = false,
+      resolution = 'days',
+      quantity = 30,
+      orientation = ''}) async {
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'per_page': perPage,
+      r'order_by': orderBy,
+      r'stats': stats,
+      r'resolution': resolution,
+      r'quantity': quantity,
+      r'orientation': orientation
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<List<dynamic>> _result = await _dio.request(
+        '/users/$username/photos',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    var value = _result.data
+        .map((dynamic i) => Photo.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
 }
