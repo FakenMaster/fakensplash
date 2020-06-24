@@ -234,6 +234,7 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
           duration: Duration(milliseconds: 200),
           opacity: actionVisible ? 1.0 : 0.0,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               ...<Tuple3<String, IconData, VoidCallback>>[
                 Tuple3('Stats', Icons.timeline, () {}),
@@ -242,35 +243,39 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                 Tuple3('Download', Icons.file_download, () {})
               ]
                   .map(
-                    (e) => Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4.0,
-                            horizontal: 6.0,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Text(
-                            e.item1,
-                            style: TextStyle(
-                              color: Colors.white,
+                    (e) => GestureDetector(
+                      onTap: showInfoDialog,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              vertical: 4.0,
+                              horizontal: 6.0,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: Text(
+                              e.item1,
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: FloatingActionButton(
-                            mini: true,
-                            heroTag: e.item1,
-                            onPressed: e.item3,
-                            child: Icon(e.item2),
-                          ),
-                        )
-                      ],
+                          Padding(
+                            padding: const EdgeInsets.all(4.0),
+                            child: FloatingActionButton(
+                              mini: true,
+                              heroTag: e.item1,
+                              onPressed: e.item3,
+                              child: Icon(e.item2),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                   .toList(),
