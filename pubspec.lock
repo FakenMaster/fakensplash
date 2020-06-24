@@ -401,6 +401,13 @@ packages:
       url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
     source: hosted
     version: "1.1.1"
+  oktoast:
+    dependency: "direct main"
+    description:
+      name: oktoast
+      url: "https://mirrors.tuna.tsinghua.edu.cn/dart-pub"
+    source: hosted
+    version: "2.3.2"
   package_config:
     dependency: transitive
     description:

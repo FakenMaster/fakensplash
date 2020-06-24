@@ -5,6 +5,7 @@ import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:wiredash/wiredash.dart';
 
 void main() {
@@ -13,6 +14,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final _navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
@@ -20,35 +22,37 @@ class MyApp extends StatelessWidget {
       systemNavigationBarColor: Color(0xfff5f6fa),
       systemNavigationBarIconBrightness: Brightness.dark,
     ));
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => PhotoBloc(),
-        ),
-        BlocProvider(
-          create: (_) => CollectionBloc(),
-        )
-      ],
-      child: Wiredash(
-        projectId: 'fakensplash-k2gyhjm',
-        secret: 'pszdeapx8xfs08u7833odbwi4fd21who',
-        options: WiredashOptionsData(
-          showDebugFloatingEntryPoint: false,
-        ),
-        navigatorKey: _navigatorKey,
-        child: MaterialApp(
-          // navigatorKey: _navigatorKey,
-          title: 'FakenSplash',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            primaryColor: Colors.white,
-            accentColor: Colors.black,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
+    return OKToast(
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => PhotoBloc(),
           ),
-          // home: MainPage(),
-          builder: (context, child) => ExtendedNavigator(
-            key: _navigatorKey,
-            router: SplashRouter(),
+          BlocProvider(
+            create: (_) => CollectionBloc(),
+          )
+        ],
+        child: Wiredash(
+          projectId: 'fakensplash-k2gyhjm',
+          secret: 'pszdeapx8xfs08u7833odbwi4fd21who',
+          options: WiredashOptionsData(
+            showDebugFloatingEntryPoint: false,
+          ),
+          navigatorKey: _navigatorKey,
+          child: MaterialApp(
+            // navigatorKey: _navigatorKey,
+            title: 'FakenSplash',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              primaryColor: Colors.white,
+              accentColor: Colors.black,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            // home: MainPage(),
+            builder: (context, child) => ExtendedNavigator(
+              key: _navigatorKey,
+              router: SplashRouter(),
+            ),
           ),
         ),
       ),

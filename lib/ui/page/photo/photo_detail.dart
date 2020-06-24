@@ -9,7 +9,9 @@ import 'package:fakensplash/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
@@ -238,13 +240,13 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
             children: <Widget>[
               ...<Tuple3<String, IconData, VoidCallback>>[
                 Tuple3('Stats', Icons.timeline, () {}),
-                Tuple3('Info', Icons.info_outline, showInfoDialog),
+                Tuple3('Info', Icons.info_outline, _showInfoDialog),
                 Tuple3('Set as wallpaper', Icons.wallpaper, () {}),
-                Tuple3('Download', Icons.file_download, () {})
+                Tuple3('Download', Icons.file_download, _saveNetworkImage)
               ]
                   .map(
                     (e) => GestureDetector(
-                      onTap: showInfoDialog,
+                      onTap: e.item3,
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         mainAxisAlignment: MainAxisAlignment.end,
@@ -301,7 +303,25 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
     );
   }
 
-  showInfoDialog() {
+  void _saveNetworkImage() async {
+    setState(() {
+      actionVisible = false;
+    });
+    var photo = context.read<Photo>();
+    print("${photo.urls.toJson().toString()}");
+    showToast("Saving image...");
+    GallerySaver.saveImage(photo.links.download).then((bool success) {
+      setState(
+        () {
+          if (success) showToast('Image is saved');
+        },
+      );
+    }, onError: (e) {
+      showToast('$e');
+    });
+  }
+
+  void _showInfoDialog() {
     setState(() {
       actionVisible = false;
     });
