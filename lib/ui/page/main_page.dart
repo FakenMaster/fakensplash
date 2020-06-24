@@ -4,11 +4,10 @@ import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/ui/page/collection/collection_page.dart';
 import 'package:fakensplash/ui/page/photo/photo_page.dart';
+import 'package:fakensplash/ui/widget/persistent_title_tab_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get_it/get_it.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:tuple/tuple.dart';
@@ -136,7 +135,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   Widget tabTitle() {
     return SliverPersistentHeader(
       pinned: true,
-      delegate: HomeTitleTabHeader(
+      delegate: TitleTabHeader(
         TabBar(
           controller: tabController,
           labelStyle: TextStyle(
@@ -204,8 +203,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      FaIcon(
-                        FontAwesomeIcons.userCircle,
+                      Icon(
+                        Icons.supervised_user_circle,
                         size: 50.0,
                       ),
                       SizedBox(
@@ -249,25 +248,4 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
   }
 }
 
-class HomeTitleTabHeader extends SliverPersistentHeaderDelegate {
-  final TabBar tabBar;
 
-  HomeTitleTabHeader(this.tabBar);
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(color: Colors.white, child: tabBar);
-  }
-
-  @override
-  double get maxExtent => tabBar.preferredSize.height;
-
-  @override
-  double get minExtent => tabBar.preferredSize.height;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
-  }
-}

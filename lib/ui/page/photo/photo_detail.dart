@@ -1,9 +1,13 @@
 import 'dart:ui' as ui;
 
+import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/bloc/photo_statistics/photo_statistics_bloc.dart';
+import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:fakensplash/ui/page/photo/photo_statistics.dart';
+import 'package:fakensplash/ui/page/user/user_profile.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
 import 'package:fakensplash/ui/widget/loading_widget.dart';
 import 'package:fakensplash/util/colors.dart';
@@ -63,11 +67,19 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                 SliverToBoxAdapter(
                   child: Column(
                     children: <Widget>[
-                      AspectRatio(
-                        aspectRatio: photo.width / photo.height,
-                        child: Image.network(
-                          '${photo.urls.regular}',
-                          fit: BoxFit.contain,
+                      GestureDetector(
+                        onTap: () => ExtendedNavigator.of(context).pushNamed(
+                          Routes.photoPreviewPage,
+                          arguments: PhotoPreviewPageArguments(
+                            url: photo.urls.full,
+                          ),
+                        ),
+                        child: AspectRatio(
+                          aspectRatio: photo.width / photo.height,
+                          child: Image.network(
+                            '${photo.urls.regular}',
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                       BlocBuilder<PhotoDetailBloc, PhotoDetailState>(
@@ -111,26 +123,45 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                         EdgeInsets.symmetric(horizontal: 16.0),
                                     child: Row(
                                       children: [
-                                        Container(
-                                          width: 30.0,
-                                          height: 30.0,
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: NetworkImage(
-                                                photoDetail
-                                                    .user.profileImage.medium,
-                                              ))),
+                                        GestureDetector(
+                                          onTap: () =>
+                                              _toUserProfile(photoDetail.user),
+                                          child: Container(
+                                            width: 30.0,
+                                            height: 30.0,
+                                            decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: NetworkImage(
+                                                  photoDetail
+                                                      .user.profileImage.medium,
+                                                ))),
+                                          ),
                                         ),
                                         SizedBox(
-                                          width: 20.0,
+                                          width: 10.0,
                                         ),
                                         Expanded(
-                                            child: Text(
-                                          'By ${photoDetail.user.name}',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                        )),
+                                          child: Row(
+                                            children: <Widget>[
+                                              GestureDetector(
+                                                onTap: () => _toUserProfile(
+                                                    photoDetail.user),
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Text(
+                                                    'By ${photoDetail.user.name}',
+                                                    maxLines: 1,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                            ],
+                                          ),
+                                        ),
                                         IconButton(
                                             onPressed: () {},
                                             icon: Icon(Icons.favorite_border)),
@@ -225,6 +256,24 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
         return Container();
       }),
     );
+  }
+
+  void _toUserProfile(User user) {
+    ExtendedNavigator.of(context).push(MaterialPageRoute(
+      builder: (_) {
+        return MultiProvider(
+          providers: [
+            Provider(
+              create: (_) => user,
+            ),
+            BlocProvider(
+              create: (_) => UserProfileBloc(),
+            )
+          ],
+          child: UserProfilePage(),
+        );
+      },
+    ));
   }
 
   Widget actionButton() {
