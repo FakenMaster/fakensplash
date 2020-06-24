@@ -70,7 +70,7 @@ class _RestClient implements RestClient {
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
     final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/phtos/$id/statistics',
+        '/photos/$id/statistics',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -78,7 +78,7 @@ class _RestClient implements RestClient {
             extra: _extra,
             baseUrl: baseUrl),
         data: _data);
-    final value = Photo.fromJson(_result.data);
+    final value = PhotoStatistics.fromJson(_result.data);
     return value;
   }
 

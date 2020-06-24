@@ -1,7 +1,9 @@
 import 'dart:ui' as ui;
 
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
+import 'package:fakensplash/bloc/photo_statistics/photo_statistics_bloc.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/ui/page/photo/photo_statistics.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
 import 'package:fakensplash/ui/widget/loading_widget.dart';
 import 'package:fakensplash/util/colors.dart';
@@ -9,9 +11,7 @@ import 'package:fakensplash/util/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gallery_saver/gallery_saver.dart';
 import 'package:intl/intl.dart';
-import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 import 'package:tuple/tuple.dart';
@@ -239,10 +239,19 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               ...<Tuple3<String, IconData, VoidCallback>>[
-                Tuple3('Stats', Icons.timeline, () {}),
+                Tuple3('Stats', Icons.timeline, _showStatisticsDialog),
                 Tuple3('Info', Icons.info_outline, _showInfoDialog),
-                Tuple3('Set as wallpaper', Icons.wallpaper, () {}),
-                Tuple3('Download', Icons.file_download, _saveNetworkImage)
+                Tuple3('Set as wallpaper', Icons.wallpaper, () {
+                  var photo = context.read<Photo>();
+                  setWallpaper(
+                      '${photo.urls.full}.unsplash-${photo.id}-${photo.user.name}.jpg');
+                }),
+                Tuple3('Download', Icons.file_download, () {
+                  var photo = context.read<Photo>();
+                  context.bloc<PhotoDetailBloc>().download(
+                      '${photo.urls.full}.unsplash-${photo.id}-${photo.user.name}.jpg',
+                      photo.id);
+                })
               ]
                   .map(
                     (e) => GestureDetector(
@@ -272,7 +281,12 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                             child: FloatingActionButton(
                               mini: true,
                               heroTag: e.item1,
-                              onPressed: e.item3,
+                              onPressed: () {
+                                setState(() {
+                                  actionVisible = false;
+                                });
+                                e.item3?.call();
+                              },
                               child: Icon(e.item2),
                             ),
                           )
@@ -303,28 +317,23 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
     );
   }
 
-  void _saveNetworkImage() async {
-    setState(() {
-      actionVisible = false;
-    });
-    var photo = context.read<Photo>();
-    print("${photo.urls.toJson().toString()}");
-    showToast("Saving image...");
-    GallerySaver.saveImage(photo.links.download).then((bool success) {
-      setState(
-        () {
-          if (success) showToast('Image is saved');
-        },
-      );
-    }, onError: (e) {
-      showToast('$e');
-    });
+  void _showStatisticsDialog() {
+    String id = context.read<Photo>().id;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog(
+            child: BlocProvider<PhotoStatisticsBloc>(
+              create: (context) => PhotoStatisticsBloc(),
+              child: PhotoStatisticsPage(
+                id: id,
+              ),
+            ),
+          );
+        });
   }
 
   void _showInfoDialog() {
-    setState(() {
-      actionVisible = false;
-    });
     var photo =
         (context.bloc<PhotoDetailBloc>().state as PhotoDetailSuccess).photo;
     var photoExif = photo.exif;

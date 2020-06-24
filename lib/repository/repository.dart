@@ -26,6 +26,14 @@ class Repository {
     return GetIt.I<RestClient>().photoDetail(id);
   }
 
+  Future<PhotoStatistics> photoStatistics(String id) async {
+    return GetIt.I<RestClient>().photoStatistics(id);
+  }
+
+  Future trackDownload(String id) async {
+    GetIt.I<RestClient>().trackDownload(id);
+  }
+
   Future<List<Collection>> collections(
       {int page = 1, bool featured = false}) async {
     if (featured) {

@@ -17,8 +17,8 @@ abstract class RestClient {
   @GET('/photos/{id}')
   Future<Photo> photoDetail(@Path('id') String id);
 
-  @GET('/phtos/{id}/statistics')
-  Future<Photo> photoStatistics(
+  @GET('/photos/{id}/statistics')
+  Future<PhotoStatistics> photoStatistics(
     @Path('id') String id, {
     @Query('resolution') String resolution = 'days',
     @Query('quantity') int quantity = 30,
