@@ -1,7 +1,8 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'position.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Position {
   Position({
     this.latitude,

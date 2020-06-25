@@ -10,9 +10,11 @@ import '../../route/splash_router.gr.dart';
 class UserCollectionListWidget extends StatelessWidget {
   final List<Collection> collections;
   final bool hasLoadMore;
+
   UserCollectionListWidget(
       {Key key, @required this.collections, this.hasLoadMore = false})
       : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return NotificationListener<ScrollNotification>(
@@ -30,8 +32,10 @@ class UserCollectionListWidget extends StatelessWidget {
           return GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              ExtendedNavigator.of(context)
-                  .pushNamed(Routes.collectionDetailPage);
+              ExtendedNavigator.of(context).pushNamed(
+                  Routes.collectionDetailPage,
+                  arguments: CollectionDetailPageArguments(
+                      collection: collections[index]));
             },
             child: itemWidget(index, context),
           );

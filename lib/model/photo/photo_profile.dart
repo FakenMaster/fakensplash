@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'photo_profile.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoProfile {
   String small;
   String medium;

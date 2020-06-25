@@ -65,4 +65,12 @@ class Repository {
       {int page = 1}) async {
     return GetIt.I<RestClient>().userCollections(username, page: page ?? 1);
   }
+
+  Future<List<Photo>> collectionPhotos(int id, {int page = 1}) async {
+    return getRestClient().collectionPhotos(id, page: page ?? 1);
+  }
+
+  RestClient getRestClient() {
+    return GetIt.I<RestClient>();
+  }
 }

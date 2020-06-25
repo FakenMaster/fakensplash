@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'photo_statistics.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoStatistics {
   String id;
   Data downloads;

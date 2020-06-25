@@ -1,8 +1,9 @@
 import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'photo.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Photo {
   Photo({
     this.id,
@@ -25,16 +26,16 @@ class Photo {
   });
 
   String id;
-  @JsonKey(name:'created_at')
+  @JsonKey(name: 'created_at')
   DateTime createdAt;
-  @JsonKey(name:'updated_at')
+  @JsonKey(name: 'updated_at')
   DateTime updatedAt;
   int width;
   int height;
   String color;
   int downloads;
   int likes;
-  @JsonKey(name:'liked_by_user')
+  @JsonKey(name: 'liked_by_user')
   bool likedByUser;
   String description;
   PhotoExif exif;
@@ -47,8 +48,6 @@ class Photo {
   User user;
 
   factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
-  
 
   Map<String, dynamic> toJson() => _$PhotoToJson(this);
-  
 }

@@ -2,12 +2,12 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'photo_link.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoLink {
   String self;
   String html;
   String download;
-  @JsonKey(name:'download_location')
+  @JsonKey(name: 'download_location')
   String downloadLocation;
 
   PhotoLink({

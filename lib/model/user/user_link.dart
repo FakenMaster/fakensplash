@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'user_link.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class UserLink {
   String self;
   String html;
@@ -18,7 +18,8 @@ class UserLink {
     this.portfolio,
   });
 
-  factory UserLink.fromJson(Map<String, dynamic> json) => _$UserLinkFromJson(json);
+  factory UserLink.fromJson(Map<String, dynamic> json) =>
+      _$UserLinkFromJson(json);
 
   Map<String, dynamic> toJson() => _$UserLinkToJson(this);
 }

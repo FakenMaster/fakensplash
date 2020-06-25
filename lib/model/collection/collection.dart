@@ -1,8 +1,9 @@
 import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'collection.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Collection {
   int id;
   String title;

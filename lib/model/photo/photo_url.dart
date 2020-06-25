@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'photo_url.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoUrl {
   String raw;
   String full;

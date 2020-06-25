@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'tag.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Tag {
   Tag({
     this.title,

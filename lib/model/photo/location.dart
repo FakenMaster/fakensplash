@@ -1,8 +1,9 @@
 import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
 part 'location.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class Location {
   Location({
     this.city,

@@ -1,12 +1,13 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 import '../model.dart';
+
 part 'photo_search_result.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoSearchResult {
   int total;
-  @JsonKey(name:'total_pages')
+  @JsonKey(name: 'total_pages')
   int totalPages;
   List<Photo> results;
 

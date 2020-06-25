@@ -19,8 +19,7 @@ abstract class RestClient {
   Future<Photo> photoDetail(@Path('id') String id);
 
   @GET('/photos/{id}/statistics')
-  Future<PhotoStatistics> photoStatistics(
-    @Path('id') String id, {
+  Future<PhotoStatistics> photoStatistics(@Path('id') String id, {
     @Query('resolution') String resolution = 'days',
     @Query('quantity') int quantity = 30,
   });
@@ -29,8 +28,7 @@ abstract class RestClient {
   Future<Photo> trackDownload(@Path('id') String id);
 
   @GET('/search/photos')
-  Future<PhotoSearchResult> searchPhoto(
-    @Query('query') String query, {
+  Future<PhotoSearchResult> searchPhoto(@Query('query') String query, {
     @Query('page') int page,
     @Query('per_page') int perPage,
     @Query('order_by') String orderBy,
@@ -58,13 +56,10 @@ abstract class RestClient {
   });
 
   @GET('/users/{username}')
-  Future<User> userProfile(
-    @Path('username') String username,
-  );
+  Future<User> userProfile(@Path('username') String username,);
 
   @GET('/users/{username}/photos')
-  Future<List<Photo>> userPhotos(
-    @Path('username') String username, {
+  Future<List<Photo>> userPhotos(@Path('username') String username, {
     @Query('page') int page = 1,
     @Query('per_page') int perPage = 20,
     @Query('order_by') String orderBy = 'latest',
@@ -75,8 +70,7 @@ abstract class RestClient {
   });
 
   @GET('/users/{username}/likes')
-  Future<List<Photo>> likedPhotos(
-    @Path('username') String username, {
+  Future<List<Photo>> likedPhotos(@Path('username') String username, {
     @Query('page') int page = 1,
     @Query('per_page') int perPage = 20,
     @Query('order_by') String orderBy = 'latest',
@@ -84,9 +78,16 @@ abstract class RestClient {
   });
 
   @GET('/users/{username}/collections')
-  Future<List<Collection>> userCollections(
-    @Path('username') String username, {
+  Future<List<Collection>> userCollections(@Path('username') String username, {
     @Query('page') int page = 1,
     @Query('per_page') int perPage = 30,
   });
+
+  @GET('/collections/{id}/photos')
+  Future<List<Photo>> collectionPhotos(
+      @Path('id') int id, {
+    @Query('page') int page = 1,
+    @Query('per_page') int perPage = 20,
+    @Query('orientation') String orientation});
+
 }

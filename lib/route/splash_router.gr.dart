@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:fakensplash/ui/page/main_page.dart';
 import 'package:fakensplash/ui/page/collection/collection_detail.dart';
+import 'package:fakensplash/model/collection/collection.dart';
 import 'package:fakensplash/ui/page/photo/photo_detail.dart';
 import 'package:fakensplash/ui/page/photo/photo_preview.dart';
 import 'package:fakensplash/ui/page/user/user_profile.dart';
@@ -46,8 +47,14 @@ class SplashRouter extends RouterBase {
           settings: settings,
         );
       case Routes.collectionDetailPage:
+        if (hasInvalidArgs<CollectionDetailPageArguments>(args)) {
+          return misTypedArgsRoute<CollectionDetailPageArguments>(args);
+        }
+        final typedArgs = args as CollectionDetailPageArguments ??
+            CollectionDetailPageArguments();
         return MaterialPageRoute<dynamic>(
-          builder: (context) => CollectionDetailPage(),
+          builder: (context) => CollectionDetailPage(
+              key: typedArgs.key, collection: typedArgs.collection),
           settings: settings,
         );
       case Routes.photoDetailPage:
@@ -81,6 +88,13 @@ class SplashRouter extends RouterBase {
 // Arguments holder classes
 // **************************************************************************
 
+//CollectionDetailPage arguments holder class
+class CollectionDetailPageArguments {
+  final Key key;
+  final Collection collection;
+  CollectionDetailPageArguments({this.key, this.collection});
+}
+
 //PhotoPreviewPage arguments holder class
 class PhotoPreviewPageArguments {
   final Key key;
@@ -95,7 +109,15 @@ class PhotoPreviewPageArguments {
 extension SplashRouterNavigationHelperMethods on ExtendedNavigatorState {
   Future pushMainPage() => pushNamed(Routes.mainPage);
 
-  Future pushCollectionDetailPage() => pushNamed(Routes.collectionDetailPage);
+  Future pushCollectionDetailPage({
+    Key key,
+    Collection collection,
+  }) =>
+      pushNamed(
+        Routes.collectionDetailPage,
+        arguments:
+            CollectionDetailPageArguments(key: key, collection: collection),
+      );
 
   Future pushPhotoDetailPage() => pushNamed(Routes.photoDetailPage);
 

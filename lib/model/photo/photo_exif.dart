@@ -2,7 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'photo_exif.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class PhotoExif {
   PhotoExif({
     this.make,
@@ -15,10 +15,10 @@ class PhotoExif {
 
   String make;
   String model;
-  @JsonKey(name:'exposure_time')
+  @JsonKey(name: 'exposure_time')
   String exposureTime;
   String aperture;
-  @JsonKey(name:'focal_length')
+  @JsonKey(name: 'focal_length')
   String focalLength;
   int iso;
 
