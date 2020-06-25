@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:fakensplash/bloc/collection/collection_bloc.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
+import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:fakensplash/ui/page/collection/collection_page.dart';
 import 'package:fakensplash/ui/page/photo/photo_page.dart';
 import 'package:fakensplash/ui/widget/persistent_title_tab_bar.dart';
@@ -34,6 +36,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     Tuple2<IconData, String>(Icons.terrain, 'All'),
     Tuple2<IconData, String>(Icons.stars, 'Featureed'),
   ];
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +88,8 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           icon: Icon(
             Icons.search,
           ),
-          onPressed: () {},
+          onPressed: () =>
+              ExtendedNavigator.of(context).pushNamed(Routes.searchPage),
         ),
         popupMenu(),
       ],

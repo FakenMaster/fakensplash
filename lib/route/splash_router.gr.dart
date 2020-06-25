@@ -13,6 +13,7 @@ import 'package:fakensplash/model/collection/collection.dart';
 import 'package:fakensplash/ui/page/photo/photo_detail.dart';
 import 'package:fakensplash/ui/page/photo/photo_preview.dart';
 import 'package:fakensplash/ui/page/user/user_profile.dart';
+import 'package:fakensplash/ui/page/search/search_page.dart';
 
 abstract class Routes {
   static const mainPage = '/';
@@ -20,12 +21,14 @@ abstract class Routes {
   static const photoDetailPage = '/photo-detail-page';
   static const photoPreviewPage = '/photo-preview-page';
   static const userProfilePage = '/user-profile-page';
+  static const searchPage = '/search-page';
   static const all = {
     mainPage,
     collectionDetailPage,
     photoDetailPage,
     photoPreviewPage,
     userProfilePage,
+    searchPage,
   };
 }
 
@@ -76,6 +79,11 @@ class SplashRouter extends RouterBase {
       case Routes.userProfilePage:
         return MaterialPageRoute<dynamic>(
           builder: (context) => UserProfilePage(),
+          settings: settings,
+        );
+      case Routes.searchPage:
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => SearchPage(),
           settings: settings,
         );
       default:
@@ -131,4 +139,6 @@ extension SplashRouterNavigationHelperMethods on ExtendedNavigatorState {
       );
 
   Future pushUserProfilePage() => pushNamed(Routes.userProfilePage);
+
+  Future pushSearchPage() => pushNamed(Routes.searchPage);
 }
