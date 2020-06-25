@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/repository/repository.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:get_it/get_it.dart';
 import 'package:meta/meta.dart';
 
 part 'user_profile_event.dart';
@@ -24,6 +26,6 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
   }
 
   Future<UserProfileState> loadData(String username) async{
-
+    GetIt.I<Repository>()
   }
 }

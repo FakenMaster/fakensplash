@@ -41,4 +41,12 @@ class Repository {
     }
     return GetIt.I<RestClient>().collections(page: page);
   }
+
+  Future<User> userProfile(String username) async {
+    return GetIt.I<RestClient>().userProfile(username);
+  }
+
+  Future<List<Photo>> userPhotos(String username,{int page = 1})async{
+    return
+  }
 }
