@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/collection/collection_bloc.dart';
+import '../../bloc/user_collection/user_collection_bloc.dart';
 import '../../route/splash_router.gr.dart';
 
-class CollectionListWidget extends StatelessWidget {
+class UserCollectionListWidget extends StatelessWidget {
   final List<Collection> collections;
   final bool hasLoadMore;
-  CollectionListWidget(
+  UserCollectionListWidget(
       {Key key, @required this.collections, this.hasLoadMore = false})
       : super(key: key);
   @override
@@ -19,7 +19,7 @@ class CollectionListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<CollectionBloc>().loadMore();
+          context.bloc<UserCollectionBloc>().loadMore();
           return true;
         }
         return false;

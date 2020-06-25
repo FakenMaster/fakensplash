@@ -2,11 +2,10 @@ import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/widget/load_error_widget.dart';
 import 'package:fakensplash/ui/widget/loading_widget.dart';
-import 'package:fakensplash/ui/widget/phot_list.dart';
+import 'package:fakensplash/ui/widget/photo_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class PhotoPage extends StatefulWidget {
   @override

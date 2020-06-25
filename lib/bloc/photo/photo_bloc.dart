@@ -9,15 +9,19 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../repository/repository.dart';
 
+part 'photo_bloc.freezed.dart';
 part 'photo_event.dart';
 part 'photo_state.dart';
-part 'photo_bloc.freezed.dart';
 
 class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
   // save latest load success data
   PhotoSuccess _photoSuccess;
+
   PhotoSuccess get photoSuccess => _photoSuccess;
   String orderBy;
+
+  bool _hasMore = true;
+
   @override
   PhotoState get initialState => PhotoInitial();
 
@@ -52,23 +56,21 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
       yield await _loadData();
     } else if (event is PhotoLoadMoreEvent) {
       var data = await _loadData(page: event.page);
-      print('结果:$data');
       yield data;
     }
   }
 
   loadMore() async {
-    print('加载更多：${_photoSuccess.page + 1}');
-    add(PhotoLoadMoreEvent(_photoSuccess.page + 1));
+    if (_hasMore) {
+      add(PhotoLoadMoreEvent(_photoSuccess.page + 1));
+    }
   }
 
   Future<PhotoState> _loadData({int page = 1}) async {
-    print('调用接口加载数据: 页码:$page,排序类型:$orderBy');
     page ??= 1;
     try {
       var data =
           await GetIt.I<Repository>().photos(page: page, orderBy: orderBy);
-      print('data数据类型:$data');
       if (data == null) {
         return PhotoState.error('数据为空');
       }
@@ -77,6 +79,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
         // clear old data.
         photos.clear();
       }
+      _hasMore = data.isNotEmpty;
       _photoSuccess = PhotoState.success(page, photos..addAll(data));
       return _photoSuccess;
     } catch (e) {

@@ -9,13 +9,14 @@ import 'package:rxdart/rxdart.dart';
 
 import '../../repository/repository.dart';
 
+part 'collection_bloc.freezed.dart';
 part 'collection_event.dart';
 part 'collection_state.dart';
-part 'collection_bloc.freezed.dart';
 
 class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   CollectionSuccess _collectionSuccess;
   bool featured = false;
+  bool _hasMore = true;
   CollectionSuccess get collectionSuccess => _collectionSuccess;
 
   @override
@@ -58,7 +59,9 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
   loadMore() async {
     // should use rxdart to detect repeat same request.
     print('加载更多：${_collectionSuccess.page + 1}');
-    add(CollectionLoadMoreEvent(_collectionSuccess.page + 1));
+    if (_hasMore) {
+      add(CollectionLoadMoreEvent(_collectionSuccess.page + 1));
+    }
   }
 
   Future<CollectionState> _loadData({int page = 1}) async {
@@ -68,13 +71,15 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
       if (data == null) {
         return CollectionState.error('数据为空');
       }
-      List<Collection> collctions = (_collectionSuccess?.collections ?? []);
+      List<Collection> collections = (_collectionSuccess?.collections ?? []);
       if (page == 1) {
         // clear old data.
-        collctions.clear();
+        collections.clear();
       }
+      _hasMore = data.isNotEmpty;
+
       _collectionSuccess =
-          CollectionState.success(page, collctions..addAll(data));
+          CollectionState.success(page, collections..addAll(data));
       return _collectionSuccess;
     } catch (e) {
       print('异常:$e');

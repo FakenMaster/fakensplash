@@ -20,12 +20,21 @@ class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
     UserProfileEvent event,
   ) async* {
     yield UserProfileState.loading();
-    if(event is UserProfileLoad){
+    if (event is UserProfileLoad) {
       yield await loadData(event.username);
     }
   }
 
-  Future<UserProfileState> loadData(String username) async{
-    GetIt.I<Repository>()
+  Future<UserProfileState> loadData(String username) async {
+    try {
+      var data = await GetIt.I<Repository>().userProfile(username);
+      if (data is User) {
+        return UserProfileState.success(data);
+      }
+      return UserProfileState.error('null');
+    } catch (e) {
+      print('用户详情异常:$e');
+      return UserProfileState.error(e);
+    }
   }
 }

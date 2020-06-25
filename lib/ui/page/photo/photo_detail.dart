@@ -177,16 +177,21 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                            '${photoDetail.description ?? ''}'),
-                                        SizedBox(
-                                          height: 6.0,
+                                        Visibility(
+                                          visible:
+                                              (photoDetail.description ?? '')
+                                                  .isNotEmpty,
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsets.only(bottom: 6.0),
+                                            child: Text(
+                                                '${photoDetail.description ?? ''}'),
+                                          ),
                                         ),
                                         ...data.asMap().entries.map((entry) {
                                           var isLast =
                                               entry.key == data.length - 1;
                                           var tuple = entry.value;
-                                          print('$isLast,$tuple');
                                           return Padding(
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 10.0),

@@ -204,15 +204,34 @@ class _RestClient implements RestClient {
   }
 
   @override
-  userPhotos(
-      {username,
-      page = 1,
-      perPage = 30,
+  userProfile(username) async {
+    ArgumentError.checkNotNull(username, 'username');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/users/$username',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = User.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  userPhotos(username,
+      {page = 1,
+      perPage = 20,
       orderBy = 'latest',
-      stats = false,
+      stats = 'false',
       resolution = 'days',
       quantity = 30,
-      orientation = ''}) async {
+      orientation}) async {
+    ArgumentError.checkNotNull(username, 'username');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -236,6 +255,59 @@ class _RestClient implements RestClient {
         data: _data);
     var value = _result.data
         .map((dynamic i) => Photo.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  likedPhotos(username,
+      {page = 1, perPage = 20, orderBy = 'latest', orientation}) async {
+    ArgumentError.checkNotNull(username, 'username');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'per_page': perPage,
+      r'order_by': orderBy,
+      r'orientation': orientation
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<List<dynamic>> _result = await _dio.request(
+        '/users/$username/likes',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    var value = _result.data
+        .map((dynamic i) => Photo.fromJson(i as Map<String, dynamic>))
+        .toList();
+    return value;
+  }
+
+  @override
+  userCollections(username, {page = 1, perPage = 30}) async {
+    ArgumentError.checkNotNull(username, 'username');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'page': page,
+      r'per_page': perPage
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<List<dynamic>> _result = await _dio.request(
+        '/users/$username/collections',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    var value = _result.data
+        .map((dynamic i) => Collection.fromJson(i as Map<String, dynamic>))
         .toList();
     return value;
   }

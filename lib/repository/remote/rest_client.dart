@@ -66,21 +66,21 @@ abstract class RestClient {
   Future<List<Photo>> userPhotos(
     @Path('username') String username, {
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 30,
+    @Query('per_page') int perPage = 20,
     @Query('order_by') String orderBy = 'latest',
-    @Query('stats') bool stats = false,
+    @Query('stats') String stats = 'false',
     @Query('resolution') String resolution = 'days',
     @Query('quantity') int quantity = 30,
-    @Query('orientation') String orientation = '',
+    @Query('orientation') String orientation,
   });
 
   @GET('/users/{username}/likes')
   Future<List<Photo>> likedPhotos(
     @Path('username') String username, {
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 30,
+    @Query('per_page') int perPage = 20,
     @Query('order_by') String orderBy = 'latest',
-    @Query('orientation') String orientation = '',
+    @Query('orientation') String orientation,
   });
 
   @GET('/users/{username}/collections')

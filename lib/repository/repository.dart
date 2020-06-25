@@ -46,7 +46,23 @@ class Repository {
     return GetIt.I<RestClient>().userProfile(username);
   }
 
-  Future<List<Photo>> userPhotos(String username,{int page = 1})async{
-    return
+  Future<List<Photo>> userPhotosWithLike(String username,
+      {bool like = true, int page = 1}) async {
+    return (like ?? true)
+        ? likedPhotos(username, page: page ?? 1)
+        : userPhotos(username, page: page ?? 1);
+  }
+
+  Future<List<Photo>> userPhotos(String username, {int page = 1}) async {
+    return GetIt.I<RestClient>().userPhotos(username, page: page ?? 1);
+  }
+
+  Future<List<Photo>> likedPhotos(String username, {int page = 1}) async {
+    return GetIt.I<RestClient>().likedPhotos(username, page: page ?? 1);
+  }
+
+  Future<List<Collection>> userCollections(String username,
+      {int page = 1}) async {
+    return GetIt.I<RestClient>().userCollections(username, page: page ?? 1);
   }
 }

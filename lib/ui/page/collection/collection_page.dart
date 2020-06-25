@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-
 class CollectionPage extends StatefulWidget {
   @override
   _CollectionPageState createState() => _CollectionPageState();
