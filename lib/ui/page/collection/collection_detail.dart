@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/page/photo/collection_photo_page.dart';
@@ -73,7 +74,7 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                                     decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         image: DecorationImage(
-                                            image: NetworkImage(
+                                            image: CachedNetworkImageProvider(
                                           widget.collection.user.profileImage
                                               .medium,
                                         ))),

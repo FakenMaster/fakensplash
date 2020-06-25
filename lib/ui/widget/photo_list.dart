@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakensplash/bloc/photo/photo_bloc.dart';
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/model/model.dart';
-import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:fakensplash/ui/page/photo/photo_detail.dart';
 import 'package:fakensplash/util/colors.dart';
 import 'package:flutter/material.dart';
@@ -71,8 +71,8 @@ class PhotoListWidget extends StatelessWidget {
                 color: HexColor.fromHex(photo.color),
                 child: AspectRatio(
                   aspectRatio: photo.width / photo.height,
-                  child: Image.network(
-                    photo.urls.small,
+                  child: CachedNetworkImage(
+                    imageUrl: photo.urls.small,
                     fit: BoxFit.cover,
                   ),
                 ),

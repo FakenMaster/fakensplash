@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -73,8 +74,8 @@ class UserCollectionListWidget extends StatelessWidget {
           //color: HexColor.fromHex(coverPhoto.color),
           child: AspectRatio(
             aspectRatio: coverPhoto.width / coverPhoto.height,
-            child: Image.network(
-              coverPhoto.urls.small,
+            child: CachedNetworkImage(
+              imageUrl: coverPhoto.urls.small,
               fit: BoxFit.cover,
             ),
           ),

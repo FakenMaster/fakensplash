@@ -1,6 +1,7 @@
 import 'dart:ui' as ui;
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/bloc/photo_statistics/photo_statistics_bloc.dart';
 import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
@@ -76,8 +77,8 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                         ),
                         child: AspectRatio(
                           aspectRatio: photo.width / photo.height,
-                          child: Image.network(
-                            '${photo.urls.regular}',
+                          child: CachedNetworkImage(
+                            imageUrl: '${photo.urls.regular}',
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -132,7 +133,8 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                             decoration: BoxDecoration(
                                                 shape: BoxShape.circle,
                                                 image: DecorationImage(
-                                                    image: NetworkImage(
+                                                    image:
+                                                        CachedNetworkImageProvider(
                                                   photoDetail
                                                       .user.profileImage.medium,
                                                 ))),
@@ -288,9 +290,8 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        AnimatedOpacity(
-          duration: Duration(milliseconds: 200),
-          opacity: actionVisible ? 1.0 : 0.0,
+        Visibility(
+          visible: actionVisible,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
 import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
@@ -81,7 +82,7 @@ class _UserProfilePageState extends State<UserProfilePage>
   Widget appBar() {
     return SliverAppBar(
       elevation: 0.0,
-      floating: true,
+//      floating: true,
       title: Text(context.read<User>().name),
       actions: [
         IconButton(
@@ -116,9 +117,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: NetworkImage(user?.profileImage?.large ??
-                              context.watch<User>()?.profileImage?.large ??
-                              ''),
+                          image: CachedNetworkImageProvider(
+                              user?.profileImage?.large ??
+                                  context.watch<User>()?.profileImage?.large ??
+                                  ''),
                         ),
                       ),
                     ),
