@@ -117,7 +117,7 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                 children: [
                                   Container(
                                     height: 50.0,
-                                    width: double.infinity,
+                                    width: MediaQuery.of(context).size.width,
                                     color: Color(0xfff5f6fa),
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 16.0),
@@ -144,21 +144,23 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                         Expanded(
                                           child: Row(
                                             children: <Widget>[
-                                              GestureDetector(
-                                                onTap: () => _toUserProfile(
-                                                    photoDetail.user),
-                                                child: Padding(
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  child: Text(
-                                                    'By ${photoDetail.user.name}',
-                                                    maxLines: 1,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                              Flexible(
+                                                child: GestureDetector(
+                                                  onTap: () => _toUserProfile(
+                                                      photoDetail.user),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    child: Text(
+                                                      'By ${photoDetail.user.name}',
+                                                      maxLines: 2,
+                                                      overflow:
+                                                          TextOverflow.clip,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                              Spacer(),
                                             ],
                                           ),
                                         ),

@@ -25,76 +25,81 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          SliverAppBar(
-            title: Text('${widget.collection.title}'),
-            actions: <Widget>[
-              IconButton(
-                icon: Icon(Icons.public),
-                onPressed: () {
-                  // Todo:这个链接好像要加上本应用的数据
-                  launchUrl(widget.collection.links.html);
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.share),
-                onPressed: () {
-                  final RenderBox box = context.findRenderObject();
-                  Share.share(widget.collection.links.html,
-                      sharePositionOrigin:
-                          box.localToGlobal(Offset.zero) & box.size);
-                },
-              )
-            ],
-          ),
-          SliverPersistentHeader(
-            delegate: PersistentTitle(
-              Container(
-                child: Material(
-                  elevation: 1.0,
-                  child: Container(
-                    height: kTextTabBarHeight,
-                    alignment: Alignment.center,
-                    child: GestureDetector(
-                      onTap: () => _toUserProfile(widget.collection.user),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            width: 30.0,
-                            height: 30.0,
-                            decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image: NetworkImage(
-                                  widget.collection.user.profileImage.medium,
-                                ))),
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: NestedScrollView(
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  SliverAppBar(
+                    title: Text('${widget.collection.title}'),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.public),
+                        onPressed: () {
+                          // Todo:这个链接好像要加上本应用的数据
+                          launchUrl(widget.collection.links.html);
+                        },
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.share),
+                        onPressed: () {
+                          final RenderBox box = context.findRenderObject();
+                          Share.share(widget.collection.links.html,
+                              sharePositionOrigin:
+                                  box.localToGlobal(Offset.zero) & box.size);
+                        },
+                      )
+                    ],
+                  ),
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: PersistentTitle(
+                      Container(
+                        child: Material(
+                          elevation: 1.0,
+                          color: Colors.white,
+                          child: Container(
+                            height: kTextTabBarHeight,
+                            alignment: Alignment.center,
+                            child: GestureDetector(
+                              onTap: () =>
+                                  _toUserProfile(widget.collection.user),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    width: 30.0,
+                                    height: 30.0,
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: NetworkImage(
+                                          widget.collection.user.profileImage
+                                              .medium,
+                                        ))),
+                                  ),
+                                  SizedBox(
+                                    width: 20.0,
+                                  ),
+                                  Text(
+                                    'By ${widget.collection.user.name}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          SizedBox(
-                            width: 20.0,
-                          ),
-                          Text(
-                            'By ${widget.collection.user.name}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: CollectionPhotoPage(
-              collectionId: widget.collection.id,
-            ),
-          ),
-        ],
-      ),
-    );
+                ];
+              },
+              body: CollectionPhotoPage(
+                collectionId: widget.collection.id,
+              )),
+        ));
   }
 
   void _toUserProfile(User user) {
