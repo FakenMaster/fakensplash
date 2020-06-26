@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
+import 'package:fakensplash/model/collection/collection_search_result.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/model/user/user_search_result.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
 import 'remote/rest_client.dart';
@@ -68,6 +71,24 @@ class Repository {
 
   Future<List<Photo>> collectionPhotos(int id, {int page = 1}) async {
     return getRestClient().collectionPhotos(id, page: page ?? 1);
+  }
+
+  Future<PhotoSearchResult> searchPhoto(
+      {@required String query,
+      @required int page,
+      @required String orientation}) async {
+    return getRestClient()
+        .searchPhoto(query, page: page ?? 1, orientation: orientation);
+  }
+
+  Future<CollectionSearchResult> searchCollection(
+      {@required String query, @required int page}) {
+    return getRestClient().searchCollection(query, page: page ?? 1);
+  }
+
+  Future<UserSearchResult> searchUser(
+      {@required String query, @required int page}) {
+    return getRestClient().searchUser(query, page: page ?? 1);
   }
 
   RestClient getRestClient() {

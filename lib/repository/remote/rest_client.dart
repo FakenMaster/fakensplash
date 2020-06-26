@@ -1,8 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:fakensplash/model/collection/collection_search_result.dart';
 import 'package:fakensplash/model/model.dart';
+import 'package:fakensplash/model/user/user_search_result.dart';
 import 'package:retrofit/http.dart';
 
 part 'rest_client.g.dart';
+
+const int DEFAULT_PAGE_SIZE = 20;
 
 @RestApi(baseUrl: 'https://api.unsplash.com')
 abstract class RestClient {
@@ -11,7 +15,7 @@ abstract class RestClient {
   @GET('/photos')
   Future<List<Photo>> photos({
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 10,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
     @Query('order_by') String orderBy = 'latest',
   });
 
@@ -19,7 +23,8 @@ abstract class RestClient {
   Future<Photo> photoDetail(@Path('id') String id);
 
   @GET('/photos/{id}/statistics')
-  Future<PhotoStatistics> photoStatistics(@Path('id') String id, {
+  Future<PhotoStatistics> photoStatistics(
+    @Path('id') String id, {
     @Query('resolution') String resolution = 'days',
     @Query('quantity') int quantity = 30,
   });
@@ -28,9 +33,10 @@ abstract class RestClient {
   Future<Photo> trackDownload(@Path('id') String id);
 
   @GET('/search/photos')
-  Future<PhotoSearchResult> searchPhoto(@Query('query') String query, {
+  Future<PhotoSearchResult> searchPhoto(
+    @Query('query') String query, {
     @Query('page') int page,
-    @Query('per_page') int perPage,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
     @Query('order_by') String orderBy,
     @Query('collections') String collectionIds,
     @Query('content_filter') String contentFilter = 'high',
@@ -43,7 +49,21 @@ abstract class RestClient {
   @GET('/collections')
   Future<List<Collection>> collections({
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 10,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
+  });
+
+  @GET('/search/collections')
+  Future<CollectionSearchResult> searchCollection(
+    @Query('query') String query, {
+    @Query('page') int page = 1,
+    @Query('per_page') int perPage = 20,
+  });
+
+  @GET('/search/users')
+  Future<UserSearchResult> searchUser(
+    @Query('query') String query, {
+    @Query('page') int page = 1,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
   });
 
   @GET('/collections/{id}')
@@ -56,12 +76,15 @@ abstract class RestClient {
   });
 
   @GET('/users/{username}')
-  Future<User> userProfile(@Path('username') String username,);
+  Future<User> userProfile(
+    @Path('username') String username,
+  );
 
   @GET('/users/{username}/photos')
-  Future<List<Photo>> userPhotos(@Path('username') String username, {
+  Future<List<Photo>> userPhotos(
+    @Path('username') String username, {
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 20,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
     @Query('order_by') String orderBy = 'latest',
     @Query('stats') String stats = 'false',
     @Query('resolution') String resolution = 'days',
@@ -70,24 +93,24 @@ abstract class RestClient {
   });
 
   @GET('/users/{username}/likes')
-  Future<List<Photo>> likedPhotos(@Path('username') String username, {
+  Future<List<Photo>> likedPhotos(
+    @Path('username') String username, {
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 20,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
     @Query('order_by') String orderBy = 'latest',
     @Query('orientation') String orientation,
   });
 
   @GET('/users/{username}/collections')
-  Future<List<Collection>> userCollections(@Path('username') String username, {
+  Future<List<Collection>> userCollections(
+    @Path('username') String username, {
     @Query('page') int page = 1,
-    @Query('per_page') int perPage = 30,
+    @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
   });
 
   @GET('/collections/{id}/photos')
-  Future<List<Photo>> collectionPhotos(
-      @Path('id') int id, {
-    @Query('page') int page = 1,
-    @Query('per_page') int perPage = 20,
-    @Query('orientation') String orientation});
-
+  Future<List<Photo>> collectionPhotos(@Path('id') int id,
+      {@Query('page') int page = 1,
+      @Query('per_page') int perPage = DEFAULT_PAGE_SIZE,
+      @Query('orientation') String orientation});
 }

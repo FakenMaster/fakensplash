@@ -17,7 +17,7 @@ class _RestClient implements RestClient {
   String baseUrl;
 
   @override
-  photos({page = 1, perPage = 10, orderBy = 'latest'}) async {
+  photos({page = 1, perPage = DEFAULT_PAGE_SIZE, orderBy = 'latest'}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -104,7 +104,7 @@ class _RestClient implements RestClient {
   @override
   searchPhoto(query,
       {page,
-      perPage,
+      perPage = DEFAULT_PAGE_SIZE,
       orderBy,
       collectionIds,
       contentFilter = 'high',
@@ -138,7 +138,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  collections({page = 1, perPage = 10}) async {
+  collections({page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -157,6 +157,54 @@ class _RestClient implements RestClient {
     var value = _result.data
         .map((dynamic i) => Collection.fromJson(i as Map<String, dynamic>))
         .toList();
+    return value;
+  }
+
+  @override
+  searchCollection(query, {page = 1, perPage = 20}) async {
+    ArgumentError.checkNotNull(query, 'query');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'page': page,
+      r'per_page': perPage
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/search/collections',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = CollectionSearchResult.fromJson(_result.data);
+    return value;
+  }
+
+  @override
+  searchUser(query, {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
+    ArgumentError.checkNotNull(query, 'query');
+    const _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{
+      r'query': query,
+      r'page': page,
+      r'per_page': perPage
+    };
+    queryParameters.removeWhere((k, v) => v == null);
+    final _data = <String, dynamic>{};
+    final Response<Map<String, dynamic>> _result = await _dio.request(
+        '/search/users',
+        queryParameters: queryParameters,
+        options: RequestOptions(
+            method: 'GET',
+            headers: <String, dynamic>{},
+            extra: _extra,
+            baseUrl: baseUrl),
+        data: _data);
+    final value = UserSearchResult.fromJson(_result.data);
     return value;
   }
 
@@ -225,7 +273,7 @@ class _RestClient implements RestClient {
   @override
   userPhotos(username,
       {page = 1,
-      perPage = 20,
+      perPage = DEFAULT_PAGE_SIZE,
       orderBy = 'latest',
       stats = 'false',
       resolution = 'days',
@@ -261,7 +309,10 @@ class _RestClient implements RestClient {
 
   @override
   likedPhotos(username,
-      {page = 1, perPage = 20, orderBy = 'latest', orientation}) async {
+      {page = 1,
+      perPage = DEFAULT_PAGE_SIZE,
+      orderBy = 'latest',
+      orientation}) async {
     ArgumentError.checkNotNull(username, 'username');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -288,7 +339,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  userCollections(username, {page = 1, perPage = 30}) async {
+  userCollections(username, {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
     ArgumentError.checkNotNull(username, 'username');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -313,7 +364,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  collectionPhotos(id, {page = 1, perPage = 20, orientation}) async {
+  collectionPhotos(id,
+      {page = 1, perPage = DEFAULT_PAGE_SIZE, orientation}) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
