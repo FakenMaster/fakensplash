@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:fakensplash/bloc/collection_bloc_mixin.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -13,7 +14,8 @@ part 'collection_bloc.freezed.dart';
 part 'collection_event.dart';
 part 'collection_state.dart';
 
-class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
+class CollectionBloc
+    extends CollectionBlocMixin<CollectionEvent, CollectionState> {
   CollectionSuccess _collectionSuccess;
   bool featured = false;
   bool _hasMore = true;
@@ -56,6 +58,7 @@ class CollectionBloc extends Bloc<CollectionEvent, CollectionState> {
     }
   }
 
+  @override
   loadMore() async {
     // should use rxdart to detect repeat same request.
     print('加载更多：${_collectionSuccess.page + 1}');

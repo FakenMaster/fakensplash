@@ -32,7 +32,7 @@ class _SearchCollectionPageState extends State<SearchCollectionPage>
           },
           loading: () => LoadingWidget(),
           loadMore: () {
-            return CollectionListWidget(
+            return CollectionListWidget<SearchCollectionBloc>(
               collections: bloc.collectionSuccess.collections,
               hasLoadMore: true,
             );
@@ -42,7 +42,8 @@ class _SearchCollectionPageState extends State<SearchCollectionPage>
             clickCallback: () => bloc.add(SearchCollectionRefreshEvent()),
           ),
           success: (int pageNo, List<Collection> collections) =>
-              CollectionListWidget(collections: collections),
+              CollectionListWidget<SearchCollectionBloc>(
+                  collections: collections),
         );
       },
     );

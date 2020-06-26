@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:fakensplash/bloc/collection_bloc_mixin.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:get_it/get_it.dart';
@@ -14,7 +15,7 @@ part 'search_collection_event.dart';
 part 'search_collection_state.dart';
 
 class SearchCollectionBloc
-    extends Bloc<SearchCollectionEvent, SearchCollectionState> {
+    extends CollectionBlocMixin<SearchCollectionEvent, SearchCollectionState> {
   SearchCollectionSuccess _collectionSuccess;
   bool _hasMore = true;
   String query;
@@ -58,6 +59,7 @@ class SearchCollectionBloc
     }
   }
 
+  @override
   loadMore() async {
     // should use rxdart to detect repeat same request.
     print('加载更多：${_collectionSuccess.page + 1}');

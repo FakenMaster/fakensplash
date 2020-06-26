@@ -32,7 +32,7 @@ class _CollectionPageState extends State<CollectionPage>
           },
           loading: () => LoadingWidget(),
           loadMore: () {
-            return CollectionListWidget(
+            return CollectionListWidget<CollectionBloc>(
               collections: bloc.collectionSuccess.collections,
               hasLoadMore: true,
             );
@@ -42,7 +42,7 @@ class _CollectionPageState extends State<CollectionPage>
             clickCallback: () => bloc.add(CollectionRefreshEvent()),
           ),
           success: (int pageNo, List<Collection> collections) =>
-              CollectionListWidget(collections: collections),
+              CollectionListWidget<CollectionBloc>(collections: collections),
         );
       },
     );

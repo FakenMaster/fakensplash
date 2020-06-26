@@ -1,14 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:fakensplash/bloc/collection_bloc_mixin.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/collection/collection_bloc.dart';
 import '../../route/splash_router.gr.dart';
 
-class CollectionListWidget extends StatelessWidget {
+class CollectionListWidget<T extends CollectionBlocMixin>
+    extends StatelessWidget {
   final List<Collection> collections;
   final bool hasLoadMore;
 
@@ -22,7 +23,7 @@ class CollectionListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<CollectionBloc>().loadMore();
+          context.bloc<T>().loadMore();
           return true;
         }
         return false;
