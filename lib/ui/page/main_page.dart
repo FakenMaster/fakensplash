@@ -88,8 +88,9 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           icon: Icon(
             Icons.search,
           ),
-          onPressed: () =>
-              ExtendedNavigator.of(context).pushNamed(Routes.searchPage),
+          onPressed: () {
+            ExtendedNavigator.of(context).pushNamed(Routes.searchPage);
+          },
         ),
         popupMenu(),
       ],

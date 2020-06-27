@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:fakensplash/model/collection/collection_search_result.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/model/user/user_search_result.dart';
+import 'package:fakensplash/repository/remote/auth_client.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get_it/get_it.dart';
 
@@ -17,6 +18,11 @@ class Repository {
       }));
 
       return RestClient(dio);
+    });
+
+    GetIt.I.registerLazySingleton<AuthClient>(() {
+      Dio dio = Dio();
+      return AuthClient(dio);
     });
   }
 
@@ -96,5 +102,10 @@ class Repository {
 
   RestClient getRestClient() {
     return GetIt.I<RestClient>();
+  }
+
+  Future userAuthenticate() async {
+    var data = await GetIt.I<AuthClient>().userAuth();
+    print('认证数据：$data');
   }
 }
