@@ -1,4 +1,6 @@
 import 'package:fakensplash/bloc/search/collection/search_collection_bloc.dart';
+import 'package:fakensplash/bloc/search/photo/search_photo_bloc.dart';
+import 'package:fakensplash/bloc/search/user/search_user_bloc.dart';
 import 'package:fakensplash/ui/page/search/search_collection_page.dart';
 import 'package:fakensplash/ui/page/search/search_photo_page.dart';
 import 'package:fakensplash/ui/page/search/search_user_page.dart';
@@ -14,8 +16,14 @@ class SearchPage extends StatelessWidget {
     return MultiProvider(
       providers: [
         BlocProvider(
+          create: (_) => SearchPhotoBloc(),
+        ),
+        BlocProvider(
           create: (_) => SearchCollectionBloc(),
-        )
+        ),
+        BlocProvider(
+          create: (_) => SearchUserBloc(),
+        ),
       ],
       child: _SearchPage(),
     );
@@ -52,6 +60,7 @@ class _SearchPageState extends State<_SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: _searchBar(),
       body: DefaultTabController(
         length: _tabTitles.length,
@@ -105,8 +114,11 @@ class _SearchPageState extends State<_SearchPage> {
   }
 
   void query(String query) {
+    context.bloc<SearchPhotoBloc>().add(SearchPhotoEvent.refresh(query: query));
     context
         .bloc<SearchCollectionBloc>()
         .add(SearchCollectionEvent.refresh(query: query));
+
+    context.bloc<SearchUserBloc>().add(SearchUserEvent.refresh(query: query));
   }
 }

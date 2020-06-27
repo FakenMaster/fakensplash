@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart'
     as extended;
@@ -252,4 +253,22 @@ class _UserProfilePageState extends State<UserProfilePage>
       ],
     );
   }
+}
+
+void toUserProfile(BuildContext context, User user) {
+  ExtendedNavigator.of(context).push(MaterialPageRoute(
+    builder: (_) {
+      return MultiProvider(
+        providers: [
+          Provider(
+            create: (_) => user,
+          ),
+          BlocProvider(
+            create: (_) => UserProfileBloc(),
+          )
+        ],
+        child: UserProfilePage(),
+      );
+    },
+  ));
 }

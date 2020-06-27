@@ -1,6 +1,4 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/ui/page/photo/collection_photo_page.dart';
 import 'package:fakensplash/ui/page/user/user_profile.dart';
@@ -9,8 +7,6 @@ import 'package:fakensplash/util/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:share/share.dart';
 
 class CollectionDetailPage extends StatefulWidget {
@@ -63,8 +59,8 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                             height: kTextTabBarHeight,
                             alignment: Alignment.center,
                             child: GestureDetector(
-                              onTap: () =>
-                                  _toUserProfile(widget.collection.user),
+                              onTap: () => toUserProfile(
+                                  context, widget.collection.user),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
@@ -101,23 +97,5 @@ class _CollectionDetailPageState extends State<CollectionDetailPage> {
                 collectionId: widget.collection.id,
               )),
         ));
-  }
-
-  void _toUserProfile(User user) {
-    ExtendedNavigator.of(context).push(MaterialPageRoute(
-      builder: (_) {
-        return MultiProvider(
-          providers: [
-            Provider(
-              create: (_) => user,
-            ),
-            BlocProvider(
-              create: (_) => UserProfileBloc(),
-            )
-          ],
-          child: UserProfilePage(),
-        );
-      },
-    ));
   }
 }

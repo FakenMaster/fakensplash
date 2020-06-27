@@ -77,8 +77,11 @@ class Repository {
       {@required String query,
       @required int page,
       @required String orientation}) async {
-    return getRestClient()
-        .searchPhoto(query, page: page ?? 1, orientation: orientation);
+    return getRestClient().searchPhoto(
+      query,
+      page: page ?? 1,
+      orientation: orientation?.toLowerCase(),
+    );
   }
 
   Future<CollectionSearchResult> searchCollection(

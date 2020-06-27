@@ -4,7 +4,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fakensplash/bloc/photo_detail/photo_detail_bloc.dart';
 import 'package:fakensplash/bloc/photo_statistics/photo_statistics_bloc.dart';
-import 'package:fakensplash/bloc/user_profile/user_profile_bloc.dart';
 import 'package:fakensplash/model/model.dart';
 import 'package:fakensplash/route/splash_router.gr.dart';
 import 'package:fakensplash/ui/page/photo/photo_statistics.dart';
@@ -125,8 +124,8 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                     child: Row(
                                       children: [
                                         GestureDetector(
-                                          onTap: () =>
-                                              _toUserProfile(photoDetail.user),
+                                          onTap: () => toUserProfile(
+                                              context, photoDetail.user),
                                           child: Container(
                                             width: 30.0,
                                             height: 30.0,
@@ -148,7 +147,8 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                                             children: <Widget>[
                                               Flexible(
                                                 child: GestureDetector(
-                                                  onTap: () => _toUserProfile(
+                                                  onTap: () => toUserProfile(
+                                                      context,
                                                       photoDetail.user),
                                                   child: Padding(
                                                     padding:
@@ -265,24 +265,6 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
         return Container();
       }),
     );
-  }
-
-  void _toUserProfile(User user) {
-    ExtendedNavigator.of(context).push(MaterialPageRoute(
-      builder: (_) {
-        return MultiProvider(
-          providers: [
-            Provider(
-              create: (_) => user,
-            ),
-            BlocProvider(
-              create: (_) => UserProfileBloc(),
-            )
-          ],
-          child: UserProfilePage(),
-        );
-      },
-    ));
   }
 
   Widget actionButton() {
