@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:oktoast/oktoast.dart';
-import 'package:wiredash/wiredash.dart';
 
 void main() {
   runApp(MyApp());
@@ -32,27 +31,43 @@ class MyApp extends StatelessWidget {
             create: (_) => CollectionBloc(),
           )
         ],
-        child: Wiredash(
-          projectId: 'fakensplash-k2gyhjm',
-          secret: 'pszdeapx8xfs08u7833odbwi4fd21who',
-          options: WiredashOptionsData(
-            showDebugFloatingEntryPoint: false,
+        child:
+//        Wiredash(
+//          projectId: 'fakensplash-k2gyhjm',
+//          secret: 'pszdeapx8xfs08u7833odbwi4fd21who',
+//          options: WiredashOptionsData(
+//            showDebugFloatingEntryPoint: false,
+//          ),
+//          navigatorKey: _navigatorKey,
+//          child: MaterialApp(
+//            // navigatorKey: _navigatorKey,
+//            title: 'FakenSplash',
+//            debugShowCheckedModeBanner: false,
+//            theme: ThemeData(
+//              primaryColor: Colors.white,
+//              accentColor: Colors.black,
+//              visualDensity: VisualDensity.adaptivePlatformDensity,
+//            ),
+//            // home: MainPage(),
+//            builder: (context, child) => ExtendedNavigator(
+//              key: _navigatorKey,
+//              router: SplashRouter(),
+//            ),
+//          ),
+//        ),
+            MaterialApp(
+          // navigatorKey: _navigatorKey,
+          title: 'FakenSplash',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primaryColor: Colors.white,
+            accentColor: Colors.black,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          navigatorKey: _navigatorKey,
-          child: MaterialApp(
-            // navigatorKey: _navigatorKey,
-            title: 'FakenSplash',
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primaryColor: Colors.white,
-              accentColor: Colors.black,
-              visualDensity: VisualDensity.adaptivePlatformDensity,
-            ),
-            // home: MainPage(),
-            builder: (context, child) => ExtendedNavigator(
-              key: _navigatorKey,
-              router: SplashRouter(),
-            ),
+          // home: MainPage(),
+          builder: (context, child) => ExtendedNavigator(
+//            key: _navigatorKey,
+            router: SplashRouter(),
           ),
         ),
       ),
