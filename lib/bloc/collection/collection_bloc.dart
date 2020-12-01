@@ -19,10 +19,9 @@ class CollectionBloc
   CollectionSuccess _collectionSuccess;
   bool featured = false;
   bool _hasMore = true;
-  CollectionSuccess get collectionSuccess => _collectionSuccess;
 
-  @override
-  CollectionState get initialState => CollectionInitial();
+  CollectionBloc() : super(CollectionState.initial());
+  CollectionSuccess get collectionSuccess => _collectionSuccess;
 
   @override
   Stream<Transition<CollectionEvent, CollectionState>> transformEvents(

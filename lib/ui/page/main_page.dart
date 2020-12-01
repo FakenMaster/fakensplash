@@ -101,10 +101,10 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
     return PopupMenuButton(
       onSelected: (int index) {
         tabController.index == 0
-            ? context.bloc<PhotoBloc>().add(PhotoEvent.refresh(
+            ? context.read<PhotoBloc>().add(PhotoEvent.refresh(
                 orderBy: photoMenuData[index].item2.toLowerCase()))
             : context
-                .bloc<CollectionBloc>()
+                .read<CollectionBloc>()
                 .add(CollectionEvent.refresh(featured: index == 1));
       },
       icon: Icon(Icons.sort),
@@ -173,7 +173,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           Key(_tabs[0]),
           extended.NestedScrollViewRefreshIndicator(
             onRefresh: () async {
-              context.bloc<PhotoBloc>().add(PhotoRefreshEvent());
+              context.read<PhotoBloc>().add(PhotoRefreshEvent());
             },
             child: PhotoPage(),
           ),
@@ -182,7 +182,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           Key(_tabs[1]),
           extended.NestedScrollViewRefreshIndicator(
             onRefresh: () async {
-              context.bloc<CollectionBloc>().add(CollectionRefreshEvent());
+              context.read<CollectionBloc>().add(CollectionRefreshEvent());
             },
             child: CollectionPage(),
           ),

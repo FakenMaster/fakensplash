@@ -11,7 +11,6 @@ import 'package:share/share.dart';
 
 class CollectionDetailPage extends StatefulWidget {
   final Collection collection;
-
   const CollectionDetailPage({Key key, this.collection}) : super(key: key);
 
   @override

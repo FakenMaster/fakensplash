@@ -34,7 +34,7 @@ class _UserPhotoPageState extends State<_UserPhotoPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<UserPhotoBloc>();
+    bloc = context.read<UserPhotoBloc>();
   }
 
   @override

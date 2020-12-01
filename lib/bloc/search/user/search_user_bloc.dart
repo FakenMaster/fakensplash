@@ -18,10 +18,9 @@ class SearchUserBloc extends Bloc<SearchUserEvent, SearchUserState> {
   bool _hasMore = true;
   String query;
 
-  SearchUserSuccess get userSuccess => _userSuccess;
+  SearchUserBloc() : super(SearchUserState.initial());
 
-  @override
-  SearchUserState get initialState => SearchUserInitial();
+  SearchUserSuccess get userSuccess => _userSuccess;
 
   @override
   Stream<Transition<SearchUserEvent, SearchUserState>> transformEvents(

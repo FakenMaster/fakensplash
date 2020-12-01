@@ -22,7 +22,7 @@ class UserCollectionListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<UserCollectionBloc>().loadMore();
+          context.read<UserCollectionBloc>().loadMore();
           return true;
         }
         return false;

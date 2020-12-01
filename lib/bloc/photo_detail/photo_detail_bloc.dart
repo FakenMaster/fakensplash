@@ -14,9 +14,8 @@ part 'photo_detail_state.dart';
 part 'photo_detail_bloc.freezed.dart';
 
 class PhotoDetailBloc extends Bloc<PhotoDetailEvent, PhotoDetailState> {
-  @override
-  PhotoDetailState get initialState => PhotoDetailInitial();
 
+  PhotoDetailBloc() : super(PhotoDetailState.initial());
   @override
   Stream<PhotoDetailState> mapEventToState(
     PhotoDetailEvent event,

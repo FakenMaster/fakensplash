@@ -33,7 +33,7 @@ class _CollectionPhotoPageState extends State<_CollectionPhotoPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<CollectionPhotoBloc>();
+    bloc = context.read<CollectionPhotoBloc>();
   }
 
   @override

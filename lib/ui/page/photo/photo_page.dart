@@ -18,7 +18,7 @@ class _PhotoPageState extends State<PhotoPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<PhotoBloc>();
+    bloc = context.read<PhotoBloc>();
   }
 
   @override

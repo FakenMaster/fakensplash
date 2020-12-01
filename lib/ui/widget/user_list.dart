@@ -19,7 +19,7 @@ class UserListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<SearchUserBloc>().loadMore();
+          context.read<SearchUserBloc>().loadMore();
           return true;
         }
         return false;

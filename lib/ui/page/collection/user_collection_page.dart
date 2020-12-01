@@ -31,7 +31,7 @@ class _UserCollectionPageState extends State<_UserCollectionPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<UserCollectionBloc>();
+    bloc = context.read<UserCollectionBloc>();
   }
 
   @override

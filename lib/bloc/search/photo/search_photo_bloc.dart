@@ -16,14 +16,13 @@ class SearchPhotoBloc extends Bloc<SearchPhotoEvent, SearchPhotoState> {
   // save latest load success data
   SearchPhotoSuccess _photoSuccess;
 
+  SearchPhotoBloc() : super(SearchPhotoState.initial());
+
   SearchPhotoSuccess get photoSuccess => _photoSuccess;
   String orientation;
   String query = '';
 
   bool _hasMore = true;
-
-  @override
-  SearchPhotoState get initialState => SearchPhotoInitial();
 
   @override
   Stream<Transition<SearchPhotoEvent, SearchPhotoState>> transformEvents(

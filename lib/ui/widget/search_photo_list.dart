@@ -24,7 +24,7 @@ class SearchPhotoListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<SearchPhotoBloc>().loadMore();
+          context.read<SearchPhotoBloc>().loadMore();
           return true;
         }
         return false;

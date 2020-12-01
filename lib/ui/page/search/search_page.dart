@@ -114,11 +114,11 @@ class _SearchPageState extends State<_SearchPage> {
   }
 
   void query(String query) {
-    context.bloc<SearchPhotoBloc>().add(SearchPhotoEvent.refresh(query: query));
+    context.read<SearchPhotoBloc>().add(SearchPhotoEvent.refresh(query: query));
     context
-        .bloc<SearchCollectionBloc>()
+        .read<SearchCollectionBloc>()
         .add(SearchCollectionEvent.refresh(query: query));
 
-    context.bloc<SearchUserBloc>().add(SearchUserEvent.refresh(query: query));
+    context.read<SearchUserBloc>().add(SearchUserEvent.refresh(query: query));
   }
 }

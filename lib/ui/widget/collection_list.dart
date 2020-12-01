@@ -23,7 +23,7 @@ class CollectionListWidget<T extends CollectionBlocMixin>
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<T>().loadMore();
+          context.read<T>().loadMore();
           return true;
         }
         return false;

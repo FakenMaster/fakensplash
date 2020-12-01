@@ -22,9 +22,7 @@ class PhotoBloc extends Bloc<PhotoEvent, PhotoState> {
 
   bool _hasMore = true;
 
-  @override
-  PhotoState get initialState => PhotoInitial();
-
+  PhotoBloc() : super(PhotoState.initial());
   @override
   Stream<Transition<PhotoEvent, PhotoState>> transformEvents(
       Stream<PhotoEvent> events, transitionFn) {

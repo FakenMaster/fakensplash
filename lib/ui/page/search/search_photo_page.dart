@@ -23,7 +23,7 @@ class _SearchPhotoPageState extends State<SearchPhotoPage>
   void initState() {
     super.initState();
     _orientationIndex = 0;
-    bloc = context.bloc<SearchPhotoBloc>();
+    bloc = context.read<SearchPhotoBloc>();
   }
 
   @override

@@ -11,9 +11,8 @@ part 'photo_statistics_bloc.freezed.dart';
 
 class PhotoStatisticsBloc
     extends Bloc<PhotoStatisticsEvent, PhotoStatisticsState> {
-  @override
-  PhotoStatisticsState get initialState => PhotoStatisticsState.initial();
 
+  PhotoStatisticsBloc() : super(PhotoStatisticsState.initial());
   @override
   Stream<PhotoStatisticsState> mapEventToState(
       PhotoStatisticsEvent event) async* {

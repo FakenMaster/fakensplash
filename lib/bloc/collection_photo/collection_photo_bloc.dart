@@ -16,13 +16,11 @@ class CollectionPhotoBloc extends Bloc<CollectionPhotoEvent, CollectionPhotoStat
 
   CollectionPhotoSuccess get photoSuccess => _photoSuccess;
 
-  @override
-  CollectionPhotoState get initialState => CollectionPhotoInitial();
   final int collectionId;
 
   bool _hasMore = true;
 
-  CollectionPhotoBloc({@required this.collectionId});
+  CollectionPhotoBloc({@required this.collectionId}):super(CollectionPhotoState.initial());
 
   @override
   Stream<Transition<CollectionPhotoEvent, CollectionPhotoState>> transformEvents(

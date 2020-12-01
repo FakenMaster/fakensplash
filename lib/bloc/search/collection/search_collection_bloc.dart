@@ -20,10 +20,9 @@ class SearchCollectionBloc
   bool _hasMore = true;
   String query;
 
-  SearchCollectionSuccess get collectionSuccess => _collectionSuccess;
+  SearchCollectionBloc() : super(SearchCollectionState.initial());
 
-  @override
-  SearchCollectionState get initialState => SearchCollectionInitial();
+  SearchCollectionSuccess get collectionSuccess => _collectionSuccess;
 
   @override
   Stream<Transition<SearchCollectionEvent, SearchCollectionState>>

@@ -12,8 +12,8 @@ part 'user_profile_state.dart';
 part 'user_profile_bloc.freezed.dart';
 
 class UserProfileBloc extends Bloc<UserProfileEvent, UserProfileState> {
-  @override
-  UserProfileState get initialState => UserProfileInitial();
+  UserProfileBloc() : super(UserProfileState.initial());
+
 
   @override
   Stream<UserProfileState> mapEventToState(

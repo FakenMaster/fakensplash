@@ -18,7 +18,7 @@ class _SearchUserPageState extends State<SearchUserPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<SearchUserBloc>();
+    bloc = context.read<SearchUserBloc>();
   }
 
   @override

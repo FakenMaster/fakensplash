@@ -18,7 +18,7 @@ class _SearchCollectionPageState extends State<SearchCollectionPage>
   @override
   void initState() {
     super.initState();
-    bloc = context.bloc<SearchCollectionBloc>();
+    bloc = context.read<SearchCollectionBloc>();
   }
 
   @override

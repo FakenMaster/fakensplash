@@ -16,14 +16,12 @@ class UserPhotoBloc extends Bloc<UserPhotoEvent, UserPhotoState> {
 
   UserPhotoSuccess get photoSuccess => _photoSuccess;
 
-  @override
-  UserPhotoState get initialState => UserPhotoInitial();
   final String username;
   final bool like;
 
   bool _hasMore = true;
 
-  UserPhotoBloc({@required this.username, @required this.like});
+  UserPhotoBloc({@required this.username, @required this.like}): super(UserPhotoState.initial());
 
   @override
   Stream<Transition<UserPhotoEvent, UserPhotoState>> transformEvents(

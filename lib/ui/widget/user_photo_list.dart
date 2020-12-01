@@ -24,7 +24,7 @@ class UserPhotoListWidget extends StatelessWidget {
       onNotification: (ScrollNotification notification) {
         if (notification.metrics.pixels ==
             notification.metrics.maxScrollExtent) {
-          context.bloc<UserPhotoBloc>().loadMore();
+          context.read<UserPhotoBloc>().loadMore();
           return true;
         }
         return false;

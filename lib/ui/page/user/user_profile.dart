@@ -49,7 +49,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           builder: (context, state) {
             User user;
             if (state is UserProfileInitial) {
-              context.bloc<UserProfileBloc>().add(
+              context.read<UserProfileBloc>().add(
                   UserProfileEvent.loadData(context.watch<User>().username));
             } else if (state is UserProfileSuccess) {
               user = state.userDetail;

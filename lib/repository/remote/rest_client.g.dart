@@ -9,7 +9,7 @@ part of 'rest_client.dart';
 class _RestClient implements RestClient {
   _RestClient(this._dio, {this.baseUrl}) {
     ArgumentError.checkNotNull(_dio, '_dio');
-    this.baseUrl ??= 'https://api.unsplash.com';
+    baseUrl ??= 'https://api.unsplash.com';
   }
 
   final Dio _dio;
@@ -17,7 +17,8 @@ class _RestClient implements RestClient {
   String baseUrl;
 
   @override
-  photos({page = 1, perPage = DEFAULT_PAGE_SIZE, orderBy = 'latest'}) async {
+  Future<List<Photo>> photos(
+      {page = 1, perPage = DEFAULT_PAGE_SIZE, orderBy = 'latest'}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -26,7 +27,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request('/photos',
+    final _result = await _dio.request<List<dynamic>>('/photos',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -41,13 +42,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  photoDetail(id) async {
+  Future<Photo> photoDetail(id) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/photos/$id',
+    final _result = await _dio.request<Map<String, dynamic>>('/photos/$id',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -60,7 +60,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  photoStatistics(id, {resolution = 'days', quantity = 30}) async {
+  Future<PhotoStatistics> photoStatistics(id,
+      {resolution = 'days', quantity = 30}) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -69,7 +70,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
+    final _result = await _dio.request<Map<String, dynamic>>(
         '/photos/$id/statistics',
         queryParameters: queryParameters,
         options: RequestOptions(
@@ -83,12 +84,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  trackDownload(id) async {
+  Future<Photo> trackDownload(id) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
+    final _result = await _dio.request<Map<String, dynamic>>(
         '/photos/$id/download',
         queryParameters: queryParameters,
         options: RequestOptions(
@@ -102,7 +103,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  searchPhoto(query,
+  Future<PhotoSearchResult> searchPhoto(query,
       {page,
       perPage = DEFAULT_PAGE_SIZE,
       orderBy,
@@ -124,8 +125,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/search/photos',
+    final _result = await _dio.request<Map<String, dynamic>>('/search/photos',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -138,7 +138,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  collections({page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
+  Future<List<Collection>> collections(
+      {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -146,7 +147,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request('/collections',
+    final _result = await _dio.request<List<dynamic>>('/collections',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -161,7 +162,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  searchCollection(query, {page = 1, perPage = 20}) async {
+  Future<CollectionSearchResult> searchCollection(query,
+      {page = 1, perPage = 20}) async {
     ArgumentError.checkNotNull(query, 'query');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -171,7 +173,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
+    final _result = await _dio.request<Map<String, dynamic>>(
         '/search/collections',
         queryParameters: queryParameters,
         options: RequestOptions(
@@ -185,7 +187,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  searchUser(query, {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
+  Future<UserSearchResult> searchUser(query,
+      {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
     ArgumentError.checkNotNull(query, 'query');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -195,8 +198,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/search/users',
+    final _result = await _dio.request<Map<String, dynamic>>('/search/users',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -209,13 +211,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  collectionDetail(id) async {
+  Future<Collection> collectionDetail(id) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/collections/$id',
+    final _result = await _dio.request<Map<String, dynamic>>('/collections/$id',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -228,7 +229,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  featuredCollections({page = 1, perPage = 10}) async {
+  Future<List<Collection>> featuredCollections({page = 1, perPage = 10}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
       r'page': page,
@@ -236,8 +237,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
-        '/collections/featured',
+    final _result = await _dio.request<List<dynamic>>('/collections/featured',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -252,13 +252,12 @@ class _RestClient implements RestClient {
   }
 
   @override
-  userProfile(username) async {
+  Future<User> userProfile(username) async {
     ArgumentError.checkNotNull(username, 'username');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _data = <String, dynamic>{};
-    final Response<Map<String, dynamic>> _result = await _dio.request(
-        '/users/$username',
+    final _result = await _dio.request<Map<String, dynamic>>('/users/$username',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -271,7 +270,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  userPhotos(username,
+  Future<List<Photo>> userPhotos(username,
       {page = 1,
       perPage = DEFAULT_PAGE_SIZE,
       orderBy = 'latest',
@@ -292,8 +291,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
-        '/users/$username/photos',
+    final _result = await _dio.request<List<dynamic>>('/users/$username/photos',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -308,7 +306,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  likedPhotos(username,
+  Future<List<Photo>> likedPhotos(username,
       {page = 1,
       perPage = DEFAULT_PAGE_SIZE,
       orderBy = 'latest',
@@ -323,8 +321,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
-        '/users/$username/likes',
+    final _result = await _dio.request<List<dynamic>>('/users/$username/likes',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',
@@ -339,7 +336,8 @@ class _RestClient implements RestClient {
   }
 
   @override
-  userCollections(username, {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
+  Future<List<Collection>> userCollections(username,
+      {page = 1, perPage = DEFAULT_PAGE_SIZE}) async {
     ArgumentError.checkNotNull(username, 'username');
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
@@ -348,7 +346,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
+    final _result = await _dio.request<List<dynamic>>(
         '/users/$username/collections',
         queryParameters: queryParameters,
         options: RequestOptions(
@@ -364,7 +362,7 @@ class _RestClient implements RestClient {
   }
 
   @override
-  collectionPhotos(id,
+  Future<List<Photo>> collectionPhotos(id,
       {page = 1, perPage = DEFAULT_PAGE_SIZE, orientation}) async {
     ArgumentError.checkNotNull(id, 'id');
     const _extra = <String, dynamic>{};
@@ -375,8 +373,7 @@ class _RestClient implements RestClient {
     };
     queryParameters.removeWhere((k, v) => v == null);
     final _data = <String, dynamic>{};
-    final Response<List<dynamic>> _result = await _dio.request(
-        '/collections/$id/photos',
+    final _result = await _dio.request<List<dynamic>>('/collections/$id/photos',
         queryParameters: queryParameters,
         options: RequestOptions(
             method: 'GET',

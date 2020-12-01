@@ -87,7 +87,7 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                             (BuildContext context, PhotoDetailState state) {
                           return state.when(
                             initial: () {
-                              context.bloc<PhotoDetailBloc>().add(
+                              context.read<PhotoDetailBloc>().add(
                                   PhotoDetailEvent.loadData(
                                       context.watch<Photo>().id));
                               return Container();
@@ -287,7 +287,7 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
                 }),
                 Tuple3('Download', Icons.file_download, () {
                   var photo = context.read<Photo>();
-                  context.bloc<PhotoDetailBloc>().download(
+                  context.read<PhotoDetailBloc>().download(
                       '${photo.urls.full}.unsplash-${photo.id}-${photo.user.name}.jpg',
                       photo.id);
                 })
@@ -374,7 +374,7 @@ class _PhotoDetailPageState extends State<PhotoDetailPage> {
 
   void _showInfoDialog() {
     var photo =
-        (context.bloc<PhotoDetailBloc>().state as PhotoDetailSuccess).photo;
+        (context.read<PhotoDetailBloc>().state as PhotoDetailSuccess).photo;
     var photoExif = photo.exif;
     showDialog(
         context: context,

@@ -18,10 +18,7 @@ class UserCollectionBloc
   final String username;
   bool _hasMore = true;
 
-  UserCollectionBloc({@required this.username});
-
-  @override
-  UserCollectionState get initialState => UserCollectionState.initial();
+  UserCollectionBloc({@required this.username}):super(UserCollectionState.initial());
 
   @override
   Stream<Transition<UserCollectionEvent, UserCollectionState>> transformEvents(
